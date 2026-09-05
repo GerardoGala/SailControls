@@ -148,22 +148,84 @@
       </div>
     </div>
 
+    <div
+      id="divStart"
+      class="mt-3 d-flex flex-column align-items-center justify-content-start w-100">
+
+      <!-- Start Button -->
+      <button
+        id="startButton"
+        type="button"
+        class="btn btn-success btn-lg px-5 mb-3">
+        Start
+      </button>
+
+      <!-- Back Button -->
+      <a
+        href="index.html"
+        id="backButton"
+        class="btn btn-primary btn-lg px-5 mb-3 w-100 d-none">
+        Back to Main Menu
+      </a>
+    </div>
  
-<div class="control-row" style="position: fixed; top: 50%; left: 50%; transform: translateX(-50%); z-index: 9999;">
-    <button id="startExamBtn">Start Exam</button>
+<!-- Capsize Autopsy Panel (Pre-created for Layout Positioning) -->
+<div id="capsizeAutopsyPanel" style="display: none; background: #fef2f2; border: 2px solid #ef4444; border-radius: 8px; padding: 16px; margin-top: 8px; font-family: sans-serif; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+  
+  <!-- Header -->
+  <div style="color: #991b1b; font-size: 14px; margin-bottom: 8px;">
+    ⚠️ <strong>CAPSIZE ANALYSIS</strong> (Physics Frozen)
+  </div>
+  
+  <!-- Cause Text Container -->
+  <p id="autopsyMessageText" style="margin: 0 0 12px 0; font-size: 12px; color: #7f1d1d; line-height: 1.4;">
+    [Testing Mode: Capsize reason message will appear here.]
+  </p>
+  
+  <!-- Stats Container -->
+  <div style="font-size: 11px; color: #475569; margin-bottom: 12px; background: #fff; padding: 6px; border-radius: 4px; border: 1px solid #fee2e2;">
+    ⏳ Survival Time: <strong id="autopsySurvivalTime">0s</strong> | Final Heel: <strong id="autopsyFinalHeel">0°</strong>
+  </div>
+  
+  <!-- Action Buttons -->
+  <div style="display: flex; gap: 6px;">
+    <button type="button" onclick="window.location.reload()" style="flex: 1; padding: 8px; font-weight: bold; background: #dc2626; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 11px;">🔄 Try Again</button>
+    <a href="index.html" style="flex: 1; text-align: center; padding: 8px; font-weight: bold; background: white; color: #475569; border: 1px solid #cbd5e1; border-radius: 4px; text-decoration: none; font-size: 11px;">🏡 Main Menu</a>
+  </div>
+
 </div>
 
-  <footer class="border-top mt-5 py-1">
-    <div class="container text-center">
-        <p class="mb-1">
-            <strong>Dinghy Sailing Tutorial</strong>
-        </p>
-        <small class="text-body-secondary">
-            Learn • Practice • Challenge
-        </small>
+
+    <div style="
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%); /* Centered vertically and horizontally */
+        pointer-events: none;
+        font-family: system-ui, -apple-system, sans-serif;
+        min-width: 250px;
+        text-align: center; /* 🎯 FIX: Centers the text inside the 250px box */
+    ">
+        <h2 style="
+            margin: 0;
+            padding: 0;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #198754;
+        ">Challenge</h2>
     </div>
-  </footer>
-    </section>
+
+    <footer class="border-top mt-5 py-1">
+      <div class="container text-center">
+          <p class="mb-1">
+              <strong>Dinghy Sailing Tutorial</strong>
+          </p>
+          <small class="text-body-secondary">
+              Learn • Practice • Challenge
+          </small>
+      </div>
+    </footer>
+  </section>
   </body>
 
   <script>
@@ -295,5 +357,7 @@
       });
   </script>
 
+  <!-- Load your calculations script last -->
+  <script src="js/challenge.js"></script>
 
 </html>

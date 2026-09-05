@@ -77,40 +77,23 @@ async function loadConfig() {
           autopsyMessage = "<strong>Hull Over-Heeled:</strong> The boat exceeded its maximum stability threshold of 45 degrees and flipped over.";
         }
 
-        // 5. Inject and display the Capsize Autopsy Panel overlay directly onto the screen
-        let autopsyDiv = document.getElementById("capsizeAutopsyPanel");
-        if (!autopsyDiv) {
-          autopsyDiv = document.createElement("div");
-          autopsyDiv.id = "capsizeAutopsyPanel";
-          const controlsParent = document.getElementById("controlsDiv") || document.body;
-          controlsParent.appendChild(autopsyDiv);
+        // 5. Inject data and display the pre-created Capsize Autopsy Panel overlay
+        const autopsyDiv = document.getElementById("capsizeAutopsyPanel");
+
+        if (autopsyDiv) {
+            // Fill in the live text and stats using the specific container IDs
+            document.getElementById("autopsyMessageText").innerText = autopsyMessage;
+            document.getElementById("autopsySurvivalTime").innerText = `${finalTime}s`;
+            
+            const finalHeelAngle = Math.round(window.globalSimulationData?.ILCA?.heelAngle || 45);
+            document.getElementById("autopsyFinalHeel").innerText = `${finalHeelAngle}°`;
+            
+            // Reveal the panel (Ensure it becomes visible if it was hidden)
+            autopsyDiv.style.display = "block";
         }
 
-        autopsyDiv.style.display = "block";
-        autopsyDiv.style.background = "#fef2f2"; 
-        autopsyDiv.style.border = "2px solid #ef4444";
-        autopsyDiv.style.borderRadius = "8px";
-        autopsyDiv.style.padding = "16px";
-        autopsyDiv.style.marginTop = "8px";
-        autopsyDiv.style.fontFamily = "sans-serif";
-        autopsyDiv.style.boxShadow = "0 4px 6px -1px rgba(0,0,0,0.1)";
-        
-        autopsyDiv.innerHTML = `
-          <div style="color: #991b1b; font-size: 14px; margin-bottom: 8px;">
-            ⚠️ <strong>CAPSIZE ANALYSIS</strong> (Physics Frozen)
-          </div>
-          <p style="margin: 0 0 12px 0; font-size: 12px; color: #7f1d1d; line-height: 1.4;">
-            ${autopsyMessage}
-          </p>
-          <div style="font-size: 11px; color: #475569; margin-bottom: 12px; background: #fff; padding: 6px; border-radius: 4px; border: 1px solid #fee2e2;">
-            ⏳ Survival Time: <strong>${finalTime}s</strong> | Final Heel: <strong>${Math.round(window.globalSimulationData.ILCA.heelAngle || 45)}°</strong>
-          </div>
-          <div style="display: flex; gap: 6px;">
-            <button onclick="window.location.reload()" style="flex: 1; padding: 8px; font-weight: bold; background: #dc2626; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 11px;">🔄 Try Again</button>
-            <a href="index.html" style="flex: 1; text-align: center; padding: 8px; font-weight: bold; background: white; color: #475569; border: 1px solid #cbd5e1; border-radius: 4px; text-decoration: none; font-size: 11px;">🏡 Main Menu</a>
-          </div>
-        `;
         return;
+
       }
 
       // ============================================================================
