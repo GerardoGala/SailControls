@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Sail Controls | San Juan Academy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=.5, user-scalable=no">
 
   <!-- 1. External Framework First (Loaded from fast global CDN servers) -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -20,23 +21,24 @@
   <script type="module" src="js/ilcaHandleControls.js"></script>
   <script type="module" src="js/ilcaMap.js"></script>
 
-	<!-- 4. Your Personal Custom CSS Last (Overrides everything above safely) -->
-  	<link rel="stylesheet" href="css/style.css">
-    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
-    <link rel="manifest" href="favicon/site.webmanifest">
-
-
-<meta name="viewport" content="width=device-width, initial-scale=.5, user-scalable=no">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    	
+  <!-- 4. Your Personal Custom CSS Last (Overrides everything above safely) -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+  <link rel="manifest" href="favicon/site.webmanifest">
 </head>
-  <div style="background-color: var(--nav-bg); color: var(--text-color); padding: 1rem; border-radius: 4px;">
-    <h2>San Juan Academy</h2>
-  </div>
+  <body>
+
+      <div style="background-color: var(--nav-bg); color: var(--text-color); padding: 1rem; border-radius: 4px;">
+        <h2>San Juan Academy</h2>
+      </div>
 
   <section>
 
-    <div id="map"                style="flex: 15;">
+    <div id="map">
     </div>
     <div id="controlSelector"    style="flex: 1;">
       <h4>&nbsp;Control Selector</h4>
@@ -147,34 +149,25 @@
         </div>
       </div>
     </div>
-  </section>
+
  
-<div class="control-row" style="position: fixed; top: 50%; left: 50%; transform: translateX(-50%); z-index: 9999;">
-    <button id="startExamBtn">Start Exam</button>
-</div>
+  <div class="control-row" style="position: fixed; top: 50%; left: 50%; transform: translateX(-50%); z-index: 9999;">
+      <button id="startExamBtn">Start Exam</button>
+  </div>
   <footer class="border-top mt-5 py-1">
-
-      <div class="container text-center">
-
-          <p class="mb-1">
-              <strong>Dinghy Sailing Tutorial</strong>
-          </p>
-
-          <small class="text-body-secondary">
-              Learn • Practice • Challenge
-          </small>
-
-      </div>
-
+    <div class="container text-center">
+        <p class="mb-1">
+            <strong>Dinghy Sailing Tutorial</strong>
+        </p>
+        <small class="text-body-secondary">
+            Learn • Practice • Challenge
+        </small>
+    </div>
   </footer>
+    </section>
 
 
-
-
-
-
-
-
+  </body>
 
   <script>
     // Map start simulation button logic
@@ -304,4 +297,6 @@
           });
       });
   </script>
+
+</body>
 </html>
