@@ -70,12 +70,13 @@
         <!-- Fixed Centerline / Keel Line Reference of the Boat -->
         <line x1="100" y1="35" x2="100" y2="150" stroke="#cbd5e0" stroke-width="2" stroke-dasharray="4,4" />
         
-        <!-- FIXED WIND INDICATOR (Always pointing straight down from North) -->
-        <g id="windArrowGroup">
-          <line x1="100" y1="5" x2="100" y2="25" stroke="#2b6cb0" stroke-width="4" stroke-linecap="round" />
-          <polygon points="94,18 100,28 106,18" fill="#2b6cb0" />
-          <text x="114" y="20" font-size="11" font-weight="bold" fill="#2b6cb0" style="user-select: none;">WIND</text>
-        </g>
+      <!-- ENLARGED WEST WIND INDICATOR (Wind blowing left-to-right from Port) -->
+      <g id="windArrowGroup">
+        <line x1="5" y1="30" x2="40" y2="30" stroke="#2b6cb0" stroke-width="5" stroke-linecap="round" />
+        <polygon points="32,22 44,30 32,38" fill="#2b6cb0" />
+        <!-- Text size matched cleanly to section captions (12px) -->
+        <text x="5" y="18" font-size="12" font-weight="bold" fill="#2b6cb0" style="user-select: none;">WIND</text>
+      </g>
 
         <!-- Dynamic Boom Component (Controlled by Mainsheet Angle) -->
         <line id="topDownBoom" x1="100" y1="35" x2="108" y2="135" stroke="#4a5568" stroke-width="4" stroke-linecap="round" />
