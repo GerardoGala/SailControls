@@ -28,7 +28,7 @@
 
   <div class="container my-4" style="max-width: 850px;">
     <div class="card shadow-sm">
-      <div class="card-header bg-dark text-white p-3">
+      <div class="card-header bg-primary  text-white p-3">
         <h5 class="m-0 fw-bold">Phase 2: Active Trim Practice Sandbox</h5>
       </div>
       
@@ -126,20 +126,22 @@
 
         </div>
 
-        <!-- ======================================================== -->
-        <!--  TAB SELECTOR NAV STRIP                                  -->
-        <!-- ======================================================== -->
-        <ul class="nav nav-tabs mb-3" id="controlTabs" role="tablist">
-          <li class="nav-item">
-            <button class="nav-link active fw-bold" onclick="switchSandboxTab('sheet-outhaul', this)">Sheet & Outhaul</button>
-          </li>
-          <li class="nav-item">
-            <button class="nav-link fw-bold" onclick="switchSandboxTab('sailor', this)">Sailor Position</button>
-          </li>
-          <li class="nav-item">
-            <button class="nav-link fw-bold" onclick="switchSandboxTab('vang-downhaul', this)">Vang & Downhaul</button>
-          </li>
-        </ul>
+<!-- ======================================================== -->
+<!--  MOBILE-FRIENDLY COMPACT CAROUSEL NAV HEADER             -->
+<!-- ======================================================== -->
+<div class="d-flex justify-content-between align-items-center bg-primary  text-white rounded p-2 mb-3 select-none">
+  <!-- Left Arrow Button -->
+  <button type="button" class="btn btn-dark fw-bold px-3 py-2 border-secondary" onclick="cycleSandboxTab(-1)">◄</button>
+  
+  <!-- Active Tab Label Text Display (Large, centered, and readable on mobile) -->
+  <div class="text-center flex-grow-1">
+    <span id="mobileTabLabel" class="fw-bold tracking-wide" style="font-size: 15px; letter-spacing: 0.5px;">Sheet & Outhaul</span>
+  </div>
+  
+  <!-- Right Arrow Button -->
+  <button type="button" class="btn btn-dark fw-bold px-3 py-2 border-secondary" onclick="cycleSandboxTab(1)">►</button>
+</div>
+
 
         <!-- ======================================================== -->
         <!--  CONTROL INTERFACE INTERCEPT PANES                       -->

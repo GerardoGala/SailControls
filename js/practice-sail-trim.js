@@ -161,3 +161,49 @@ function triggerSandboxRefresh() {
   anime({ targets: '#crewHead', cx: headX, easing: 'easeOutQuad', duration: 400 });
   anime({ targets: '#crewBody', x2: bodyX2, easing: 'easeOutQuad', duration: 400 });
 }
+
+
+/**
+ * Continuous Loop Carousel Navigator for Mobile Devices
+ */
+const SANDBOX_TABS_LIST = ["sheet-outhaul", "sailor", "vang-downhaul"];
+const SANDBOX_LABELS_MAP = {
+  "sheet-outhaul": "Sheet & Outhaul",
+  "sailor":        "Sailor Position",
+  "vang-downhaul": "Vang & Downhaul"
+};
+let currentTabPointerIndex = 0;
+
+function cycleSandboxTab(directionOffset) {
+  // 1. Advance or regress the active index pointer
+  currentTabPointerIndex += directionOffset;
+
+  // 2. Continuous Loop Logic: if slipping past the bounds, cycle around to the opposite side
+  if (currentTabPointerIndex < 0) {
+    currentTabPointerIndex = SANDBOX_TABS_LIST.length - 1; // Loop back to the end
+  } 
+  else if (currentTabPointerIndex >= SANDBOX_TABS_LIST.length) {
+    currentTabPointerIndex = 0; // Loop around to the start
+  }
+
+  // 3. Extract target tab keys out of tracking indices
+  const targetTabKey = SANDBOX_TABS_LIST[currentTabPointerIndex];
+
+  // 4. Instantly update the text label inside the mobile container header
+  const labelElement = document.getElementById("mobileTabLabel");
+  if (labelElement) {
+    labelElement.innerText = SANDBOX_LABELS_MAP[targetTabKey];
+  }
+
+  // 5. Pipe visibility changes to your original layout structures
+  // Re-routes directly into your stable function block
+  document.querySelectorAll('.control-panel-group').forEach(p => p.classList.add('d-none'));
+  document.getElementById(`panel-${targetTabKey}`).classList.remove('d-none');
+
+  document.querySelectorAll('.sandbox-view').forEach(v => v.classList.remove('active-view'));
+  if (targetTabKey === 'sheet-outhaul') document.getElementById('viewCamber').classList.add('active-view');
+  if (targetTabKey === 'sailor') document.getElementById('viewSailor').classList.add('active-view');
+  if (targetTabKey === 'vang-downhaul') document.getElementById('viewRig').classList.add('active-view');
+
+  triggerSandboxRefresh();
+}
