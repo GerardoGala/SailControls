@@ -75,8 +75,9 @@
             <line x1="30" y1="130" x2="270" y2="130" stroke="#e2e8f0" stroke-width="2" stroke-dasharray="6,4" />
 
             <!-- IMMOBILE CORE GROUP NODE (Permanently anchored at vector coordinates 150, 130) -->
-            <g id="tutorialBoatGroup" transform="translate(150, 130) rotate(-25)">
-              <!-- Hull Geometry Outline -->
+<!-- THE IMMOBILE BOAT GROUP: CSS transition ensures zero positional drift across steps -->
+<g id="tutorialBoatGroup" transform="translate(150, 130) rotate(-25)" style="transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);">
+             <!-- Hull Geometry Outline -->
               <path d="M 0,-30 C 12,-15 12,20 0,35 C -12,20 -12,-15 0,-30 Z" fill="#edf2f7" stroke="#4a5568" stroke-width="3" />
               <!-- Mast Node -->
               <circle cx="0" cy="-15" r="4" fill="#2d3748" />
@@ -132,71 +133,80 @@
   <script>
     let currentStep = 1;
 
-    const SLIDE_DATA = {
-      1: {
-        title: "Sailing Close-Hauled (Upwind) - Board Down",
-        text: "When sailing into the wind, the sail generates massive sideways force. Keeping the daggerboard <strong>fully down</strong> acts like an underwater wing, converting that side push into forward speed and stopping you from drifting sideways.",
-        num: "Step 1 of 3"
-      },
-      2: {
-        title: "The Danger of No Centerboard - Board Up!",
-        text: "If you pull the daggerboard <strong>UP</strong> while sailing upwind, the boat loses its lateral grip on the water. The forward arrow collapses and the boat slips completely sideways downwind.",
-        num: "Step 2 of 3"
-      },
-      3: {
-        title: "Sailing Downwind - Raising the Board for Speed",
-        text: "When turning downwind to run with the breeze, you no longer experience sideways force. Raising the board <strong>UP</strong> reduces underwater friction and drag, unlocking maximum downwind hull velocity!",
-        num: "Step 3 of 3"
-      }
-    };
+const SLIDE_DATA = {
+  1: {
+    title: "Sailing Close-Hauled (Upwind) - Board Down",
+    text: "When sailing into the wind, the sail generates massive sideways force. Keeping the daggerboard <strong>fully down</strong> acts like an underwater wing, converting that side push into forward speed and stopping you from drifting sideways.",
+    num: "Step 1 of 3"
+  },
+  2: {
+    title: "The Danger of No Centerboard - Board Up!",
+    text: "If you pull the daggerboard <strong>UP</strong> while sailing upwind, the boat loses its lateral grip on the water. The forward arrow collapses and the boat slips completely sideways downwind.",
+    num: "Step 2 of 3"
+  },
+  3: {
+    title: "Sailing Downwind - Raising the Board for Speed",
+    text: "When turning downwind to run with the breeze, you no longer experience sideways force. Raising the board <strong>UP</strong> reduces underwater friction and drag, unlocking maximum downwind hull velocity!",
+    num: "Step 3 of 3"
+  }
+};
 
-    function advanceStep() {
-      currentStep++;
-      if (currentStep > 3) return;
-      
-      const slide = SLIDE_DATA[currentStep];
-      document.getElementById("slideTitle").innerHTML = slide.title;
-      document.getElementById("slideText").innerHTML = slide.text;
-      document.getElementById("slideNumber").innerText = slide.num;
+function advanceStep() {
+  currentStep++;
+  if (currentStep > 3) return;
+  
+  const slide = SLIDE_DATA[currentStep];
+  document.getElementById("slideTitle").innerHTML = slide.title;
+  document.getElementById("slideText").innerHTML = slide.text;
+  document.getElementById("slideNumber").innerText = slide.num;
 
-      const dots = document.querySelectorAll(".step-dot");
-      dots.forEach((dot, index) => {
-        dot.classList.toggle("active", index === (currentStep - 1));
-      });
+  const dots = document.querySelectorAll(".step-dot");
+  dots.forEach((dot, index) => {
+    dot.classList.toggle("active", index === (currentStep - 1));
+  });
 
-      runStepAnimation(currentStep);
+  runStepAnimation(currentStep);
 
-      if (currentStep === 3) {
-        document.getElementById("nextBtn").classList.add("d-none");
-        document.getElementById("practiceBtn").classList.remove("d-none");
-      }
-    }
+  if (currentStep === 3) {
+    document.getElementById("nextBtn").classList.add("d-none");
+    document.getElementById("practiceBtn").classList.remove("d-none");
+  }
+}
 
-    function runStepAnimation(step) {
-      if (step === 1) {
-        document.getElementById("boardIndicator").setAttribute("fill", "#2d3748");
-        
-        anime({ targets: '#tutorialBoatGroup', rotate: -25, duration: 600, easing: 'easeOutQuad' });
-        anime({ targets: '#learnBoom', x2: 6, y2: 22, duration: 400 });
-        anime({ targets: '#vectorForward', scaleY: 1.0, opacity: 1, duration: 500 });
-        anime({ targets: '#vectorDrift', scaleX: 0.2, opacity: 0.3, duration: 500 });
-      } 
-      else if (step === 2) {
-        document.getElementById("boardIndicator").setAttribute("fill", "#ffffff");
+function runStepAnimation(step) {
+  const boatGroup = document.getElementById("tutorialBoatGroup");
 
-        anime({ targets: '#tutorialBoatGroup', rotate: -25, duration: 600, easing: 'easeOutQuad' });
-        anime({ targets: '#vectorForward', scaleY: 0.2, opacity: 0.4, duration: 600 });
-        anime({ targets: '#vectorDrift', scaleX: 1.5, opacity: 1, duration: 700 });
-      } 
-      else if (step === 3) {
-        document.getElementById("boardIndicator").setAttribute("fill", "#ffffff");
+  if (step === 1) {
+    document.getElementById("boardIndicator").setAttribute("fill", "#2d3748");
+    
+    // Lock position at absolute 150, 130 inside the SVG view grid template
+    boatGroup.setAttribute("transform", "translate(150, 130) rotate(-25)");
+    
+    anime({ targets: '#learnBoom', x2: 6, y2: 22, duration: 400 });
+    anime({ targets: '#vectorForward', scaleY: 1.0, opacity: 1, duration: 500 });
+    anime({ targets: '#vectorDrift', scaleX: 0.2, opacity: 0.3, duration: 500 });
+  } 
+  else if (step === 2) {
+    // Step 2: Keeps boat centered perfectly upwind but alters the vector sizing
+    document.getElementById("boardIndicator").setAttribute("fill", "#ffffff");
 
-        anime({ targets: '#tutorialBoatGroup', rotate: 65, duration: 1000, easing: 'easeOutElastic(1, .6)' });
-        anime({ targets: '#learnBoom', x2: -25, y2: 5, duration: 700 }); 
-        anime({ targets: '#vectorForward', scaleY: 1.4, opacity: 1, duration: 800 });
-        anime({ targets: '#vectorDrift', scaleX: 0, opacity: 0, duration: 500 });
-      }
-    }
+    boatGroup.setAttribute("transform", "translate(150, 130) rotate(-25)");
+    
+    anime({ targets: '#vectorForward', scaleY: 0.2, opacity: 0.4, duration: 600 });
+    anime({ targets: '#vectorDrift', scaleX: 1.5, opacity: 1, duration: 700 });
+  } 
+  else if (step === 3) {
+    // Step 3: Swings rotation smoothly to 65 deg while keeping position centered at 150, 130
+    document.getElementById("boardIndicator").setAttribute("fill", "#ffffff");
+
+    boatGroup.setAttribute("transform", "translate(150, 130) rotate(65)");
+    
+    anime({ targets: '#learnBoom', x2: -25, y2: 5, duration: 700 }); 
+    anime({ targets: '#vectorForward', scaleY: 1.4, opacity: 1, duration: 800 });
+    anime({ targets: '#vectorDrift', scaleX: 0, opacity: 0, duration: 500 });
+  }
+}
+
   </script>
 </body>
 </html>
