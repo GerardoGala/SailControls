@@ -42,40 +42,56 @@
 
   <section>
   
-    <!-- HORIZONTAL SIDE-BY-SIDE SVGs -->
-    <div id="sail-visualization-container" class="row g-3 mb-4">
-      
-      <!-- Section 1: Sail Shape Profile -->
-      <div id="sailProfileDiv" class="col-md-6 text-center">
-        <div class="border rounded p-3 bg-light">
-          <h5 class="text-start text-secondary fw-semibold mb-2">&nbsp;Sail Shape Profile (Side View)</h5>
-          <div class="canvas-wrapper bg-white rounded border border-light">
-            <svg viewBox="0 0 200 160" width="50%" height="50%">
-              <line id="mastLine" x1="50" y1="150" x2="65" y2="10" stroke="#4a5568" stroke-width="4" stroke-linecap="round" />
-              <path id="sailProfilePath" d="M 50,145 Q 75,75 65,15" fill="none" stroke="#0d6efd" stroke-width="5" stroke-linecap="round"/>
-              <line id="boomLine" x1="50" y1="145" x2="160" y2="145" stroke="#4a5568" stroke-width="3" />
-            </svg>
-          </div>
-        </div>
-      </div>
-
-      <!-- Section 2: Camber Cross-Section -->
-      <div id="sailCamberDiv" class="col-md-6 text-center">
-        <div class="border rounded p-3 bg-light">
-          <h5 class="text-start text-secondary fw-semibold mb-2">&nbsp;Camber Cross-Section (Top-Down View)</h5>
-          <div class="canvas-wrapper bg-white rounded border border-light">
-            <svg viewBox="0 0 200 160" width="50%" height="50%">
-              <line x1="20" y1="80" x2="180" y2="80" stroke="#cbd5e0" stroke-width="2" stroke-dasharray="4,4" />
-              <path id="sailCamberPath" d="M 20,80 Q 100,45 180,80" fill="none" stroke="#dc3545" stroke-width="5" stroke-linecap="round"/>
-              <path id="foilReferencePath" d="M 100,80 L 100,135" stroke="#718096" stroke-width="4" stroke-linecap="round" />
-              <text x="15" y="25" font-size="10" fill="#718096" class="user-select-none">Mast (Front)</text>
-              <text x="145" y="25" font-size="10" fill="#718096" class="user-select-none">Clew (Back)</text>
-            </svg>
-          </div>
-        </div>
-      </div>
-
+<!-- HORIZONTAL SIDE-BY-SIDE SVGs -->
+<div id="sail-visualization-container" style="display: flex; flex-direction: row; gap: 12px; width: 75%; margin: 0 auto 16px auto;">
+  
+  <!-- Section 1: Sail Shape Profile (Side View) -->
+  <div id="sailProfileDiv" class="visual-pane" style="flex: 1; border: 1px solid #ccc; border-radius: 4px; padding: 6px; text-align: center; background: #f9f9f9;">
+    <h5 style="margin: 0 0 6px 0; font-size: 12px; text-align: left; color: #333;">&nbsp;Sail Shape Profile (Side View)</h5>
+    <div class="canvas-wrapper" style="height: 120px; display: flex; align-items: center; justify-content: center;">
+      <svg viewBox="0 0 200 160" width="50%" height="50%">
+        <!-- Rigid Mast -->
+        <line id="mastLine" x1="50" y1="130" x2="65" y2="10" stroke="#4a5568" stroke-width="4" stroke-linecap="round" />
+        <!-- Morphable Sail Cloth Curve -->
+        <path id="sailProfilePath" d="M 50,125 Q 75,65 65,15" fill="none" stroke="#3182ce" stroke-width="5" stroke-linecap="round"/>
+        <!-- Boom Line -->
+        <line id="boomLine" x1="50" y1="125" x2="160" y2="125" stroke="#4a5568" stroke-width="3" />
+        <!-- Daggerboard -->
+        <path id="foilReferencePath" d="M 90,127 L 90,158" stroke="#718096" stroke-width="6" stroke-linecap="square" />
+      </svg>
     </div>
+  </div>
+
+  <!-- Section 2: Camber Cross-Section (Top-Down View) -->
+  <div id="sailCamberDiv" class="visual-pane" style="flex: 1; border: 1px solid #ccc; border-radius: 4px; padding: 6px; text-align: center; background: #f9f9f9;">
+    <h5 style="margin: 0 0 6px 0; font-size: 12px; text-align: left; color: #333;">&nbsp;Camber Cross-Section (Top-Down View)</h5>
+    <div class="canvas-wrapper" style="height: 120px; display: flex; align-items: center; justify-content: center;">
+      <svg viewBox="0 0 200 160" width="50%" height="50%">
+        <!-- Fixed Centerline / Keel Line Reference of the Boat -->
+        <line x1="100" y1="35" x2="100" y2="150" stroke="#cbd5e0" stroke-width="2" stroke-dasharray="4,4" />
+        
+        <!-- FIXED WIND INDICATOR (Always pointing straight down from North) -->
+        <g id="windArrowGroup">
+          <line x1="100" y1="5" x2="100" y2="25" stroke="#2b6cb0" stroke-width="4" stroke-linecap="round" />
+          <polygon points="94,18 100,28 106,18" fill="#2b6cb0" />
+          <text x="114" y="20" font-size="11" font-weight="bold" fill="#2b6cb0" style="user-select: none;">WIND</text>
+        </g>
+
+        <!-- Dynamic Boom Component (Controlled by Mainsheet Angle) -->
+        <line id="topDownBoom" x1="100" y1="35" x2="108" y2="135" stroke="#4a5568" stroke-width="4" stroke-linecap="round" />
+
+        <!-- Morphable Sail Foil (Controlled by Outhaul Depth and attached to Boom coordinates) -->
+        <path id="sailCamberPath" d="M 100,35 Q 125,85 108,135" fill="none" stroke="#e53e3e" stroke-width="4" stroke-linecap="round"/>
+
+        <!-- Fixed Center Point Mast Indicator -->
+        <circle cx="100" cy="35" r="5" fill="#4a5568" />
+      </svg>
+    </div>
+  </div>
+
+</div>
+
+
 
 
 

@@ -1,45 +1,48 @@
 /**
  * sail-trim.js - Production Vector Morphing Engine
- * Connects your page's live click events directly to fluid SVG transitions.
+ * Separates Mainsheet (Boom Angle) from Outhaul (Sail Camber Shape Profile)
  */
 
-// 1. Precise geometric path maps matched directly to your HTML string values
 const SAIL_VECTORS = {
   profile: {
     vang: {
-      "Ease":   "M 50,145 Q 110,75 65,15", // Deep, ballooned sail pocket
-      "Center": "M 50,145 Q 75,75 65,15",  // Standard neutral shape
-      "Max":    "M 50,145 Q 52,75 65,15"   // Flattened aerodynamic blade
+      "Ease":   "M 50,125 Q 110,65 65,15",
+      "Center": "M 50,125 Q 75,65 65,15",
+      "Max":    "M 50,125 Q 52,65 65,15"
     },
     downhaul: {
-      "Off":      "M 50,145 Q 85,85 65,15", // Full rounded front entry
-      "Base":     "M 50,145 Q 75,75 65,15", // Balanced mid-depth draft
-      "Max Luff": "M 50,145 Q 58,65 65,15"  // Stretched and flattened entry
+      "Off":      "M 50,125 Q 85,75 65,15",
+      "Base":     "M 50,125 Q 75,65 65,15",
+      "Max Luff": "M 50,125 Q 58,55 65,15"
     }
   },
+  
+  // NEW LOGICAL SEPARATION GRID FOR TOP-DOWN VIEW
   camber: {
-    outhaul: {
-      "Full": "M 20,80 Q 100,10 180,80", // Maximum deep structural wing pocket
-      "Base": "M 20,80 Q 100,45 180,80", // Normal standard cross-section curve
-      "Flat": "M 20,80 Q 100,78 180,80"  // Stretched flat against the boom
+    // Mainsheet exclusively controls the Clew coordinate (x2, y2) of the Boom line
+    mainsheetBoomCoords: {
+      "0-8":   { x2: 108, y2: 135 }, // Tight to centerline (Upwind)
+      "5-15":  { x2: 120, y2: 133 },
+      "35-65": { x2: 165, y2: 110 }, // Reaching out
+      "40-70": { x2: 175, y2: 100 },
+      "75-85": { x2: 190, y2: 65  }, // Downwind run square
+      "90":    { x2: 195, y2: 45  }  // Swung out all the way 90 degrees
     },
-    mainsheet: {
-      "0-8":   "M 20,80 Q 100,45 180,80",
-      "5-15":  "M 20,80 Q 95,50 175,90",
-      "35-65": "M 20,80 Q 80,70 140,120",
-      "40-70": "M 20,80 Q 75,75 130,130",
-      "75-85": "M 20,80 Q 65,85 95,150",
-      "90":    "M 20,80 Q 60,90 70,155"  // Released broad downwind angle
+    // Outhaul exclusively dictates the depth modifier offset for the Q control point
+    outhaulBellyOffset: {
+      "Full": 35, // Deep ballooning wind pocket curve
+      "Base": 18, // Optimal generic foil pocket curve
+      "Flat": 2   // Pulled flat inline with the boom tube axis
     }
   },
+  
   daggerboard: {
-    "CENTERBOARD UP": "M 100,80 L 100,85",  // Matches your 'CENTERBOARD UP' text
-    "Center":         "M 100,80 L 100,105", 
-    "Down":           "M 100,80 L 100,135"  
+    "CENTERBOARD UP": "M 90,127 L 90,130", 
+    "Center":         "M 90,127 L 90,145", 
+    "Down":           "M 90,127 L 90,158"  
   }
 };
 
-// 2. Global State Storage reflecting your interface layout defaults
 const sailState = {
   mainsheet: "0-8",
   sailorPosition: "Mid Center",
@@ -49,83 +52,82 @@ const sailState = {
   outhaul: "Base"
 };
 
-// 3. Interface Event Handlers (Called by your HTML buttons)
+// Interface Clicks Routing Links
+function updateBoomControl(value) { sailState.mainsheet = value; triggerInstantTrimAnimation(); }
+function updateDaggerboardControl(value) { sailState.daggerboard = value; triggerInstantTrimAnimation(); }
+function updateSailorPosition(value) { sailState.sailorPosition = value; triggerInstantTrimAnimation(); }
+function updateVangControl(value) { sailState.vang = value; triggerInstantTrimAnimation(); }
+function updateDownhaulControl(value) { sailState.downhaul = value; triggerInstantTrimAnimation(); }
+function updateOuthaulControl(value) { sailState.outhaul = value; triggerInstantTrimAnimation(); }
 
-function updateBoomControl(value) {
-  sailState.mainsheet = value; // e.g., '0-8', '35-65', '90'
-  triggerInstantTrimAnimation();
-}
-
-function updateDaggerboardControl(value) {
-  sailState.daggerboard = value; // e.g., 'CENTERBOARD UP', 'Center', 'Down'
-  triggerInstantTrimAnimation();
-}
-
-function updateSailorPosition(value) {
-  sailState.sailorPosition = value; // e.g., 'Forward', 'Hike Hard', 'Leeward', 'Aft'
-  triggerInstantTrimAnimation();
-}
-
-function updateVangControl(value) {
-  sailState.vang = value; // e.g., 'Max', 'Center', 'Ease'
-  triggerInstantTrimAnimation();
-}
-
-function updateDownhaulControl(value) {
-  sailState.downhaul = value; // e.g., 'Max Luff', 'Base', 'Off'
-  triggerInstantTrimAnimation();
-}
-
-function updateOuthaulControl(value) {
-  sailState.outhaul = value; // e.g., 'Flat', 'Base', 'Full'
-  triggerInstantTrimAnimation();
-}
-
-// 4. The Master Vector Recalculation & Animation Engine
 function triggerInstantTrimAnimation() {
-  // Resolve Profile vector coordinate configurations (Prioritize Vang changes)
+  // Resolve Side Profile Canvas Line
   const profilePath = sailState.vang === "Center"
     ? SAIL_VECTORS.profile.downhaul[sailState.downhaul]
     : SAIL_VECTORS.profile.vang[sailState.vang];
 
-  // Resolve Camber vector configurations (Prioritize Mainsheet sheet tracking)
-  const camberPath = sailState.mainsheet === "0-8"
-    ? SAIL_VECTORS.camber.outhaul[sailState.outhaul]
-    : SAIL_VECTORS.camber.mainsheet[sailState.mainsheet];
-
-  // Resolve Daggerboard line coordinates
+  // Resolve Daggerboard Line Depth
   const boardPath = SAIL_VECTORS.daggerboard[sailState.daggerboard] || SAIL_VECTORS.daggerboard["Down"];
 
-  // Calculate dynamic canvas rotation angle based on sailor weight positioning
+  // MATHEMATICAL COMBINATION FOR TOP-DOWN VIEW
+  // 1. Get Clew target points from active Mainsheet selection
+  const boomTarget = SAIL_VECTORS.camber.mainsheetBoomCoords[sailState.mainsheet];
+  
+  // 2. Get curvature offset depth from active Outhaul selection
+  const depthOffset = SAIL_VECTORS.camber.outhaulBellyOffset[sailState.outhaul];
+
+  // 3. Compute midpoints dynamically so sail curve stays anchored to boom orientation
+  const midX = (100 + boomTarget.x2) / 2;
+  const midY = (35 + boomTarget.y2) / 2;
+
+  // 4. Extrude the Bézier curve control point perpendicular to wind vector (pushes right/leeward)
+  const sailControlX = midX + depthOffset;
+  const sailControlY = midY;
+
+  // Assemble the unified SVG string dynamically
+  const dynamicCamberPath = `M 100,35 Q ${sailControlX},${sailControlY} ${boomTarget.x2},${boomTarget.y2}`;
+
+  // Calculate dynamic roll angle (Sailor hiking leverage offset)
   let rotationDeg = 0;
   if (sailState.sailorPosition === "Leeward") rotationDeg = 6;
   if (sailState.sailorPosition === "Hike Hard") rotationDeg = -10;
   if (sailState.sailorPosition === "Forward") rotationDeg = -2;
   if (sailState.sailorPosition === "Aft") rotationDeg = 3;
 
-  // Execute continuous GPU calculations via Anime.js Core
+  // Execute Fluid Morphs via Anime.js Core
   anime({
     targets: '#sailProfilePath',
     d: [ { value: profilePath } ],
-    easing: 'easeOutElastic(1, .6)', // Interactive cloth 'flutter snap' feel
+    easing: 'easeOutElastic(1, .6)',
     duration: 1100
   });
 
+  // ANIMATE BOOM LINE EXTENSION ANGLE
   anime({
-    targets: '#sailCamberPath',
-    d: [ { value: camberPath } ],
+    targets: '#topDownBoom',
+    x2: boomTarget.x2,
+    y2: boomTarget.y2,
     easing: 'easeOutQuad',
-    duration: 750
+    duration: 700
   });
 
+  // ANIMATE SAIL CLOTH FOIL ATTACHED TO BOOM
+  anime({
+    targets: '#sailCamberPath',
+    d: [ { value: dynamicCamberPath } ],
+    easing: 'easeOutQuad',
+    duration: 700
+  });
+
+  // Animate Daggerboard Drop Line
   anime({
     targets: '#foilReferencePath',
     d: [ { value: boardPath } ],
-    easing: 'easeOutBounce', // Gives a physical notch-drop feel
-    duration: 600
+    easing: 'easeOutBounce',
+    duration: 650
   });
 
-  // Tilts the whole visualization coordinate space to represent boat roll
+  // Dynamic boat lean angle simulation
   anime({
     targets: '#sailProfileDiv svg, #sailCamberDiv svg',
     rotate: rotationDeg,
