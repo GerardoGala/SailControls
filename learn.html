@@ -1,191 +1,202 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=0.5, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ILCA Tutorial - Learn Phase</title>
+  
+  
+  <!-- 1. Bootstrap 5 CSS CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- 2. Force the Open-Source Animation Engine to load first -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.0/anime.min.js"></script>
 
-  <title>Sail Cotrols | San Juan Academy</title>
-
-  <!-- Bootstrap -->
-
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
-    rel="stylesheet">
-
-  <!-- Material Icons -->
-
-  <link
-    href="https://fonts.googleapis.com/icon?family=Material+Icons"
-    rel="stylesheet">
-
-  <!-- Leaflet -->
-
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet/dist/leaflet.css">
-
-  <!-- Custom CSS -->
-
-  <link rel="stylesheet" href="css/style.css">
-
-  <!-- Favicon -->
-
-  <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
-  <link rel="manifest" href="favicon/site.webmanifest">
-
-  <!-- Core Simulation Data -->
-
-  <script src="js/globalSimulationData.js"></script>
-
-  <!-- Leaflet -->
-
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
-  <!-- Simulator -->
-
-  <script type="module" src="js/app.js"></script>
-
-  <script type="module" src="js/ilcaHandleControls.js"></script>
-
-  <script type="module" src="js/ilcaMap.js"></script>
-
+  <style>
+    body { 
+      background-color: #f0f4f8; 
+    }
+    .tutorial-card { 
+      max-width: 750px; 
+      margin: 40px auto; 
+    }
+    /* FIX: Force an absolute bounded graphic workspace zone to stop clipping */
+    .fixed-canvas-box { 
+      height: 240px; 
+      width: 100%;
+      background: white; 
+      border: 1px solid #dee2e6; 
+      border-radius: 6px; 
+      padding: 10px;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .step-dot { 
+      width: 12px; 
+      height: 12px; 
+      border-radius: 50%; 
+      background-color: #cbd5e0; 
+      display: inline-block; 
+      margin: 0 4px; 
+    }
+    .step-dot.active { 
+      background-color: #0d6efd; 
+    }
+  </style>
 </head>
-
 <body>
 
-  <!-- San Juan Academy Header -->
+  <div class="container">
+    <div class="card tutorial-card shadow-sm">
+      
+      <!-- HEADER -->
+      <div class="card-header bg-dark text-white p-3 d-flex justify-content-between align-items-center">
+        <h5 class="m-0 fw-bold">Phase 1: Understanding the Daggerboard</h5>
+        <span class="badge bg-secondary" id="slideNumber">Step 1 of 3</span>
+      </div>
 
-  <div style="
-    background-color: var(--nav-bg);
-    color: var(--text-color);
-    padding: 1rem;
-    border-radius: 4px;
-  ">
-    <h2>San Juan Academy</h2>
+      <!-- VISUAL CANVAS BOX -->
+      <div class="card-body p-4">
+        
+        <!-- FIXED DIMENSION BOUNDARY WRAPPER CONTAINER -->
+        <div class="fixed-canvas-box mb-3">
+          <!-- Keeping width and height strictly set to 100% inside the 240px container box -->
+          <svg viewBox="0 0 300 220" width="100%" height="100%">
+            
+            <!-- FIXED WIND ARROW (Safely isolated in the upper boundary space) -->
+            <g id="windIndicator">
+              <line x1="20" y1="35" x2="65" y2="35" stroke="#2b6cb0" stroke-width="5" stroke-linecap="round" />
+              <polygon points="57,26 69,35 57,44" fill="#2b6cb0" />
+              <text x="20" y="20" font-size="12" font-weight="bold" fill="#2b6cb0" style="user-select: none;">WIND</text>
+            </g>
+
+            <!-- Reference Course Track Baseline (Directly centered vertically on y=130) -->
+            <line x1="30" y1="130" x2="270" y2="130" stroke="#e2e8f0" stroke-width="2" stroke-dasharray="6,4" />
+
+            <!-- IMMOBILE CORE GROUP NODE (Permanently anchored at vector coordinates 150, 130) -->
+            <g id="tutorialBoatGroup" transform="translate(150, 130) rotate(-25)">
+              <!-- Hull Geometry Outline -->
+              <path d="M 0,-30 C 12,-15 12,20 0,35 C -12,20 -12,-15 0,-30 Z" fill="#edf2f7" stroke="#4a5568" stroke-width="3" />
+              <!-- Mast Node -->
+              <circle cx="0" cy="-15" r="4" fill="#2d3748" />
+              <!-- Boom Component -->
+              <line id="learnBoom" x1="0" y1="-15" x2="6" y2="22" stroke="#4a5568" stroke-width="3" />
+              
+              <!-- Daggerboard Slot State Indicator overlay -->
+              <rect id="boardIndicator" x="-2" y="-2" width="4" height="12" fill="#2d3748" stroke="#2d3748" stroke-width="1" />
+
+              <!-- PERFORMANCE VECTOR ARROWS -->
+              <!-- Green Forward Velocity -->
+              <g id="vectorForward" style="transform-origin: 0px -30px; transform-box: fill-box;">
+                <line x1="0" y1="-30" x2="0" y2="-75" stroke="#28a745" stroke-width="5" stroke-linecap="round" />
+                <polygon points="-6,-67 0,-79 6,-67" fill="#28a745" />
+              </g>
+              <!-- Red Sideways Drift -->
+              <g id="vectorDrift" style="transform-origin: 10px 0px; transform-box: fill-box;">
+                <line x1="10" y1="0" x2="45" y2="0" stroke="#dc3545" stroke-width="5" stroke-linecap="round" />
+                <polygon points="37,-6 49,0 37,6" fill="#dc3545" />
+              </g>
+            </g>
+
+          </svg>
+        </div>
+
+        <!-- EXPLANATION DESCRIPTION PANELS -->
+        <div class="p-3 bg-light rounded text-start" style="min-height: 85px;">
+          <h6 class="fw-bold text-primary mb-1" id="slideTitle">Sailing Close-Hauled (Upwind) - Board Down</h6>
+          <p class="m-0 text-secondary" id="slideText">When sailing into the wind, the sail generates massive sideways force. Keeping the daggerboard <strong>fully down</strong> acts like an underwater wing, converting that side push into forward speed and stopping you from drifting sideways.</p>
+        </div>
+      </div>
+
+      <!-- FOOTER NAVIGATION ROUTING BUTTONS -->
+      <div class="card-footer bg-white p-3 d-flex justify-content-between align-items-center border-top-0">
+        <a href="index.html" class="btn btn-outline-secondary px-3">Back to Main Menu</a>
+        
+        <div id="dotContainer">
+          <span class="step-dot active"></span>
+          <span class="step-dot"></span>
+          <span class="step-dot"></span>
+        </div>
+
+        <div>
+          <button id="nextBtn" class="btn btn-primary px-4 fw-bold" onclick="advanceStep()">Next Step</button>
+          <a id="practiceBtn" href="practice.html" class="btn btn-success px-4 fw-bold d-none">Proceed to Practice →</a>
+        </div>
+      </div>
+
+    </div>
   </div>
 
-  <!-- Simulation Area -->
-
-  <section>
-
-
-<div id="map"></div>
-
-<div
-  id="divStart"
-  class="mt-3 d-flex flex-column align-items-center justify-content-start w-100">
-
-  <!-- Start Button -->
-  <button
-    id="startButton"
-    type="button"
-    class="btn btn-success btn-lg px-5 mb-3">
-    Start
-  </button>
-
-  <!-- Back Button -->
-  <a
-    href="index.html"
-    id="backButton"
-    class="btn btn-primary btn-lg px-5 mb-3 w-100 d-none">
-    Back to Main Menu
-  </a>
-
-</div>
-
-
-
-  </section>
-
-  <!-- Floating Learn Indicator -->
-  <div style="
-    position: absolute;
-    top: 40%;
-    left: 50%;
-    transform: translate(-40%, -50%);
-    pointer-events: none;
-    font-family: system-ui, -apple-system, sans-serif;
-    min-width: 250px;
-    text-align: center;
-  ">
-
-<h2 style="
-  margin: 0;
-  padding: 0;
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: #0d6efd;
-">
-  Learn
-</h2>
-
-
-  </div>
-  <!-- Floating Learn Indicator -->
-  <div style="
-    position: absolute;
-    top: 40%;
-    left: 50%;
-    transform: translate(-40%, -50%);
-    pointer-events: none;
-    font-family: system-ui, -apple-system, sans-serif;
-    min-width: 250px;
-    text-align: center;
-  ">
-
-<h2 style="
-  margin: 0;
-  padding: 0;
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: #0d6efd;
-">
-  Learn
-</h2>
-
-
-  </div>
-  <!-- Footer -->
-
-  <footer class="border-top mt-5 py-1">
-
-
-<div class="container text-center">
-
-  <p class="mb-1">
-    <strong>Dinghy Sailing Tutorial</strong>
-  </p>
-
-  <small class="text-body-secondary">
-    Learn • Practice • Challenge
-  </small>
-
-</div>
-
-
-  </footer>
-
-  <!-- Start Button Logic -->
-
+  <!-- INTERACTIVE TIMELINE SCRIPT LOGIC LAYER -->
   <script>
+    let currentStep = 1;
 
-    const startButton = document.getElementById('startButton');
-    const backButton = document.getElementById('backButton');
+    const SLIDE_DATA = {
+      1: {
+        title: "Sailing Close-Hauled (Upwind) - Board Down",
+        text: "When sailing into the wind, the sail generates massive sideways force. Keeping the daggerboard <strong>fully down</strong> acts like an underwater wing, converting that side push into forward speed and stopping you from drifting sideways.",
+        num: "Step 1 of 3"
+      },
+      2: {
+        title: "The Danger of No Centerboard - Board Up!",
+        text: "If you pull the daggerboard <strong>UP</strong> while sailing upwind, the boat loses its lateral grip on the water. The forward arrow collapses and the boat slips completely sideways downwind.",
+        num: "Step 2 of 3"
+      },
+      3: {
+        title: "Sailing Downwind - Raising the Board for Speed",
+        text: "When turning downwind to run with the breeze, you no longer experience sideways force. Raising the board <strong>UP</strong> reduces underwater friction and drag, unlocking maximum downwind hull velocity!",
+        num: "Step 3 of 3"
+      }
+    };
 
-    startButton.addEventListener('click', function () {
+    function advanceStep() {
+      currentStep++;
+      if (currentStep > 3) return;
+      
+      const slide = SLIDE_DATA[currentStep];
+      document.getElementById("slideTitle").innerHTML = slide.title;
+      document.getElementById("slideText").innerHTML = slide.text;
+      document.getElementById("slideNumber").innerText = slide.num;
 
-      launchSimulation();
+      const dots = document.querySelectorAll(".step-dot");
+      dots.forEach((dot, index) => {
+        dot.classList.toggle("active", index === (currentStep - 1));
+      });
 
-      startButton.classList.add('d-none');
-      backButton.classList.remove('d-none');
+      runStepAnimation(currentStep);
 
-    });
+      if (currentStep === 3) {
+        document.getElementById("nextBtn").classList.add("d-none");
+        document.getElementById("practiceBtn").classList.remove("d-none");
+      }
+    }
 
+    function runStepAnimation(step) {
+      if (step === 1) {
+        document.getElementById("boardIndicator").setAttribute("fill", "#2d3748");
+        
+        anime({ targets: '#tutorialBoatGroup', rotate: -25, duration: 600, easing: 'easeOutQuad' });
+        anime({ targets: '#learnBoom', x2: 6, y2: 22, duration: 400 });
+        anime({ targets: '#vectorForward', scaleY: 1.0, opacity: 1, duration: 500 });
+        anime({ targets: '#vectorDrift', scaleX: 0.2, opacity: 0.3, duration: 500 });
+      } 
+      else if (step === 2) {
+        document.getElementById("boardIndicator").setAttribute("fill", "#ffffff");
+
+        anime({ targets: '#tutorialBoatGroup', rotate: -25, duration: 600, easing: 'easeOutQuad' });
+        anime({ targets: '#vectorForward', scaleY: 0.2, opacity: 0.4, duration: 600 });
+        anime({ targets: '#vectorDrift', scaleX: 1.5, opacity: 1, duration: 700 });
+      } 
+      else if (step === 3) {
+        document.getElementById("boardIndicator").setAttribute("fill", "#ffffff");
+
+        anime({ targets: '#tutorialBoatGroup', rotate: 65, duration: 1000, easing: 'easeOutElastic(1, .6)' });
+        anime({ targets: '#learnBoom', x2: -25, y2: 5, duration: 700 }); 
+        anime({ targets: '#vectorForward', scaleY: 1.4, opacity: 1, duration: 800 });
+        anime({ targets: '#vectorDrift', scaleX: 0, opacity: 0, duration: 500 });
+      }
+    }
   </script>
-
 </body>
 </html>
