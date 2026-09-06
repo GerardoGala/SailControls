@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sail Tuning Simulator - Proof of Concept</title>
+  
+  <!-- 1. Force the Open-Source Animation Engine to load first -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.0/anime.min.js"></script>
+  
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      padding: 20px;
+      background-color: #f0f4f8;
+      color: #333;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      padding: 24px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
+    #sail-visualization-container {
+      display: flex; 
+      flex-direction: row; 
+      gap: 16px; 
+      width: 100%; 
+      margin-bottom: 24px;
+    }
+    .visual-pane {
+      flex: 1; 
+      border: 1px solid #cbd5e0; 
+      border-radius: 6px; 
+      padding: 12px; 
+      background: #f7fafc;
+      text-align: center;
+    }
+    .canvas-wrapper {
+      height: 180px; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center;
+    }
+    .control-panel {
+      background: #edf2f7;
+      padding: 16px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+    }
+    .control-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .control-button {
+      flex: 1;
+      padding: 12px;
+      font-size: 14px;
+      font-weight: bold;
+      border: 1px solid #cbd5e0;
+      border-radius: 4px;
+      background-color: white;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .control-button:hover {
+      background-color: #e2e8f0;
+    }
+    .control-button:active {
+      transform: scale(0.98);
+    }
+    h4, h5 {
+      margin: 0;
+      color: #2d3748;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Sail Trim Proof of Concept</h2>
+    <p>Click any control button below to see the vector shapes morph instantly without a start button.</p>
+
+    <!-- HORIZONTAL SIDE-BY-SIDE SVGs -->
+    <div id="sail-visualization-container">
+      
+      <!-- Section 1: Sail Shape Profile (Side View) triggered by Vang -->
+      <div id="sailProfileDiv" class="visual-pane">
+        <h5>Sail Shape Profile (Side View)</h5>
+        <div class="canvas-wrapper">
+          <svg viewBox="0 0 200 160" width="100%" height="100%">
+            <!-- Rigid Mast -->
+            <line x1="50" y1="150" x2="65" y2="10" stroke="#4a5568" stroke-width="4" stroke-linecap="round" />
+            <!-- Morphable Sail Cloth Curve -->
+            <path id="sailProfilePath" d="M 50,145 Q 75,75 65,15" fill="none" stroke="#3182ce" stroke-width="5" stroke-linecap="round"/>
+            <!-- Boom Line -->
+            <line x1="50" y1="145" x2="160" y2="145" stroke="#4a5568" stroke-width="3" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- Section 2: Camber Cross-Section (Top-Down View) triggered by Outhaul -->
+      <div id="sailCamberDiv" class="visual-pane">
+        <h5>Camber Cross-Section (Top-Down View)</h5>
+        <div class="canvas-wrapper">
+          <svg viewBox="0 0 200 160" width="100%" height="100%">
+            <!-- Reference Baseline -->
+            <line x1="20" y1="80" x2="180" y2="80" stroke="#cbd5e0" stroke-width="2" stroke-dasharray="4,4" />
+            <!-- Morphable Camber Curve -->
+            <path id="sailCamberPath" d="M 20,80 Q 100,45 180,80" fill="none" stroke="#e53e3e" stroke-width="5" stroke-linecap="round"/>
+            <text x="15" y="105" font-size="10" fill="#718096">Mast (Front)</text>
+            <text x="145" y="105" font-size="10" fill="#718096">Clew (Back)</text>
+          </svg>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- INTERFACE CONTROLS -->
+    <div class="control-panel">
+      <h4>Vang Control (Affects Side Profile)</h4>
+      <div class="control-row">
+        <button class="control-button" onclick="updateVangControl('Ease')">MAX EASE</button>
+        <button class="control-button" onclick="updateVangControl('Center')">CENTER</button>
+        <button class="control-button" onclick="updateVangControl('Max')">MAX VANG</button>
+      </div>
+    </div>
+
+    <div class="control-panel">
+      <h4>Outhaul Control (Affects Bottom Camber)</h4>
+      <div class="control-row">
+        <button class="control-button" onclick="updateOuthaulControl('Full')">FULL FOOT</button>
+        <button class="control-button" onclick="updateOuthaulControl('Base')">BASE</button>
+        <button class="control-button" onclick="updateOuthaulControl('Flat')">FLAT FOOT</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Link your custom logic engine -->
+  <script src="js/sail-trim.js"></script>
+</body>
+</html>
