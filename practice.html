@@ -3,359 +3,212 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sail Tuning Simulator - Bootstrap Active State POC</title>
+  <title>ILCA Training - Practice Sandbox</title>
   
   <!-- 1. Bootstrap 5 CSS CDN -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
- <!-- 2. Force the Open-Source Animation Engine to load first -->
+  <!-- 2. Force the Open-Source Animation Engine to load first -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.0/anime.min.js"></script>
 
+
   <style>
-    body {
-      background-color: #f0f4f8;
-    }
+    body { background-color: #f0f4f8; }
     .canvas-wrapper {
-      height: 180px; 
+      height: 140px; 
       display: flex; 
       align-items: center; 
       justify-content: center;
+      background: white;
     }
-    /* Simple baseline style for all interactive trim nodes */
-    .control-button {
-      transition: all 0.2s ease-in-out;
-    }
+    .sandbox-view { display: none; }
+    .sandbox-view.active-view { display: block !important; }
   </style>
- 
-   <!-- 3. Your Personal Custom CSS Last (Overrides everything above safely) -->
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
-  <link rel="manifest" href="favicon/site.webmanifest">
-  <meta name="viewport" content="width=device-width, initial-scale=.5, user-scalable=no">
 </head>
-<body> <!-- 🎯 Added missing body tag for cleaner HTML semantics -->
+<body>
 
-  <div style="background-color: var(--nav-bg); color: var(--text-color); padding: 1rem; border-radius: 4px;">
-    <h2>San Juan Academy</h2>
-  </div>
-
-  <section>
-  
-<!-- HORIZONTAL SIDE-BY-SIDE SVGs -->
-<div id="sail-visualization-container" style="display: flex; flex-direction: row; gap: 12px; width: 75%; margin: 0 auto 16px auto;">
-  
-  <!-- Section 1: Sail Shape Profile (Side View) -->
-  <div id="sailProfileDiv" class="visual-pane" style="flex: 1; border: 1px solid #ccc; border-radius: 4px; padding: 6px; text-align: center; background: #f9f9f9;">
-    <h5 style="margin: 0 0 6px 0; font-size: 12px; text-align: left; color: #333;">&nbsp;Sail Shape Profile (Side View)</h5>
-    <div class="canvas-wrapper" style="height: 120px; display: flex; align-items: center; justify-content: center;">
-      <svg viewBox="0 0 200 160" width="50%" height="50%">
-        <!-- Rigid Mast -->
-        <line id="mastLine" x1="50" y1="130" x2="65" y2="10" stroke="#4a5568" stroke-width="4" stroke-linecap="round" />
-        <!-- Morphable Sail Cloth Curve -->
-        <path id="sailProfilePath" d="M 50,125 Q 75,65 65,15" fill="none" stroke="#3182ce" stroke-width="5" stroke-linecap="round"/>
-        <!-- Boom Line -->
-        <line id="boomLine" x1="50" y1="125" x2="160" y2="125" stroke="#4a5568" stroke-width="3" />
-        <!-- Daggerboard -->
-        <path id="foilReferencePath" d="M 90,127 L 90,158" stroke="#718096" stroke-width="6" stroke-linecap="square" />
-      </svg>
-    </div>
-  </div>
-
-  <!-- Section 2: Camber Cross-Section (Top-Down View) -->
-  <div id="sailCamberDiv" class="visual-pane" style="flex: 1; border: 1px solid #ccc; border-radius: 4px; padding: 6px; text-align: center; background: #f9f9f9;">
-    <h5 style="margin: 0 0 6px 0; font-size: 12px; text-align: left; color: #333;">&nbsp;Camber Cross-Section (Top-Down View)</h5>
-    <div class="canvas-wrapper" style="height: 120px; display: flex; align-items: center; justify-content: center;">
-      <svg viewBox="0 0 200 160" width="50%" height="50%">
-        <!-- Fixed Centerline / Keel Line Reference of the Boat -->
-        <line x1="100" y1="35" x2="100" y2="150" stroke="#cbd5e0" stroke-width="2" stroke-dasharray="4,4" />
+  <div class="container my-4" style="max-width: 850px;">
+    <div class="card shadow-sm">
+      <div class="card-header bg-dark text-white p-3">
+        <h5 class="m-0 fw-bold">Phase 2: Active Trim Practice Sandbox</h5>
+      </div>
+      
+      <div class="card-body p-4">
         
-      <!-- ENLARGED WEST WIND INDICATOR (Wind blowing left-to-right from Port) -->
-      <g id="windArrowGroup">
-        <line x1="5" y1="30" x2="40" y2="30" stroke="#2b6cb0" stroke-width="5" stroke-linecap="round" />
-        <polygon points="32,22 44,30 32,38" fill="#2b6cb0" />
-        <!-- Text size matched cleanly to section captions (12px) -->
-        <text x="5" y="18" font-size="12" font-weight="bold" fill="#2b6cb0" style="user-select: none;">WIND</text>
-      </g>
+        <!-- ======================================================== -->
+        <!--  VISUALIZATION ZONE (DYNAMIC CANVAS MUTATION TRACK)      -->
+        <!-- ======================================================== -->
+        <div class="border rounded p-3 bg-light mb-4">
+          
+          <!-- VIEW A: Camber Cross-Section (Visible for Sheet & Outhaul) -->
+          <div id="viewCamber" class="sandbox-view active-view">
+            <h6 class="text-secondary fw-bold mb-2">Camber Cross-Section (Top-Down View)</h6>
+            <div class="canvas-wrapper rounded border">
+              <svg viewBox="0 0 200 160" width="50%" height="100%">
+                <line x1="35" y1="80" x2="165" y2="80" stroke="#cbd5e0" stroke-width="2" stroke-dasharray="4,4" />
+                <!-- CORRECTED WIND INDICATOR: Blowing straight down from North (Top to Bottom) -->
+                <g id="windArrowGroup">
+                  <line x1="100" y1="5" x2="100" y2="25" stroke="#2b6cb0" stroke-width="5" stroke-linecap="round" />
+                  <polygon points="94,17 100,28 106,17" fill="#2b6cb0" />
+                  <text x="114" y="20" font-size="12" font-weight="bold" fill="#2b6cb0" style="user-select: none;">WIND</text>
+                </g>
 
-        <!-- Dynamic Boom Component (Controlled by Mainsheet Angle) -->
-        <line id="topDownBoom" x1="100" y1="35" x2="108" y2="135" stroke="#4a5568" stroke-width="4" stroke-linecap="round" />
+                <line id="topDownBoom" x1="50" y1="80" x2="148" y2="83" stroke="#4a5568" stroke-width="4" stroke-linecap="round" />
+                <path id="sailCamberPath" d="M 50,80 Q 95,98 148,83" fill="none" stroke="#e53e3e" stroke-width="4" stroke-linecap="round"/>
+                <circle cx="50" cy="80" r="5" fill="#4a5568" />
+                <text x="35" y="102" font-size="10" fill="#718096">Mast</text>
+                <text x="125" y="102" font-size="10" fill="#718096">Clew</text>
+              </svg>
+            </div>
+          </div>
 
-        <!-- Morphable Sail Foil (Controlled by Outhaul Depth and attached to Boom coordinates) -->
-        <path id="sailCamberPath" d="M 100,35 Q 125,85 108,135" fill="none" stroke="#e53e3e" stroke-width="4" stroke-linecap="round"/>
+<!-- VIEW B: Sailor Position Dual Tracker (Back & Side View) -->
+<div id="viewSailor" class="sandbox-view">
+  <h6 class="text-secondary fw-bold mb-2">Sailor Position Layout (Transom & Bow Trim)</h6>
+  <div class="canvas-wrapper rounded border" style="height: 180px; background: white; padding: 10px;">
+    
+    <!-- Unified isolated container for standalone layout bounding -->
+    <div style="width: 100%; max-width: 320px; height: 100%; margin: 0 auto; position: relative;">
+      <svg viewBox="0 0 200 160" width="100%" height="100%">
+        
+        <!-- ======================================================== -->
+        <!--  STATIC GRAPHIC ITEMS (These will NEVER tilt or rotate) -->
+        <!-- ======================================================== -->
+        <!-- HEAVY GALE WEST WIND INDICATOR (Blowing left-to-right onto the Port beam) -->
+        <g id="sailorWindGroup">
+          <line x1="15" y1="25" x2="55" y2="25" stroke="#2b6cb0" stroke-width="5" stroke-linecap="round" />
+          <polygon points="47,17 59,25 47,33" fill="#2b6cb0" />
+          <text x="15" y="14" font-size="12" font-weight="bold" fill="#2b6cb0" style="user-select: none;">HEAVY WIND</text>
+        </g>
 
-        <!-- Fixed Center Point Mast Indicator -->
-        <circle cx="100" cy="35" r="5" fill="#4a5568" />
+        <!-- STATIC CAPTIONS & INDICATORS -->
+        <text x="5" y="152" font-size="11" font-weight="bold" fill="#718096" style="user-select: none;">Port (Left)</text>
+        <text x="142" y="152" font-size="11" font-weight="bold" fill="#718096" style="user-select: none;">Starboard (Right)</text>
+        <text x="5" y="42" font-size="10" fill="#a0aec0" style="user-select: none;">Transom (Back View)</text>
+
+        <!-- ======================================================== -->
+        <!--  DYNAMIC TILTING SIMULATION GROUP (Targeted via ID)       -->
+        <!-- ======================================================== -->
+        <g id="tiltingRigGroup">
+          
+          <!-- ILCA Hull Profile (Transom View) -->
+          <polygon points="70,105 130,105 140,120 60,120" fill="#edf2f7" stroke="#4a5568" stroke-width="3" />
+          
+          <!-- Aluminum Rig Mast (Extends vertical from hull midpoint 100, 105) -->
+          <line x1="100" y1="105" x2="100" y2="30" stroke="#4a5568" stroke-width="4" stroke-linecap="round" />
+          
+          <!-- Stylized Sailor Stick Figure Crew Weight -->
+          <!-- Head -->
+          <circle id="crewHead" cx="100" cy="92" r="6" fill="#2d3748" />
+          <!-- Spine/Torso -->
+          <line id="crewBody" x1="100" y1="98" x2="100" y2="114" stroke="#2d3748" stroke-width="3" />
+        </g>
+
       </svg>
     </div>
-  </div>
 
+  </div>
 </div>
 
 
+          <!-- VIEW C: Rig Profile (Visible for Vang & Downhaul Mast Bending) -->
+          <div id="viewRig" class="sandbox-view">
+            <h6 class="text-secondary fw-bold mb-2">Rig Profile Tension (Side View Mast Bend)</h6>
+            <div class="canvas-wrapper rounded border">
+              <svg viewBox="0 0 200 160" width="50%" height="100%">
+                <line x1="30" y1="145" x2="180" y2="145" stroke="#cbd5e0" stroke-width="2" />
+                <!-- Mast Component (Targeted via Path for bending curves) -->
+                <path id="mastProfilePath" d="M 50,145 Q 50,75 50,15" fill="none" stroke="#4a5568" stroke-width="4" stroke-linecap="round"/>
+                <line id="profileBoomLine" x1="50" y1="125" x2="150" y2="125" stroke="#4a5568" stroke-width="3" />
+                <path id="sailProfileCurvePath" d="M 50,125 Q 75,70 50,20" fill="none" stroke="#3182ce" stroke-width="4" stroke-linecap="round" />
+              </svg>
+            </div>
+          </div>
 
+        </div>
 
+        <!-- ======================================================== -->
+        <!--  TAB SELECTOR NAV STRIP                                  -->
+        <!-- ======================================================== -->
+        <ul class="nav nav-tabs mb-3" id="controlTabs" role="tablist">
+          <li class="nav-item">
+            <button class="nav-link active fw-bold" onclick="switchSandboxTab('sheet-outhaul', this)">Sheet & Outhaul</button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link fw-bold" onclick="switchSandboxTab('sailor', this)">Sailor Position</button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link fw-bold" onclick="switchSandboxTab('vang-downhaul', this)">Vang & Downhaul</button>
+          </li>
+        </ul>
 
- 
-    <div id="controlSelector"    style="flex: 1;">
-      <h4>&nbsp;Control Selector</h4>
-      <div class="controlSelector" style="display: flex; gap: 12px; align-items: center;">
-          <label>
-              <input type="radio" name="inputControl" value="1" checked>
-              Sheet
-          </label>
-          <label>
-              <input type="radio" name="inputControl" value="2">
-              Sailor Position
-          </label>
-          <label>
-              <input type="radio" name="inputControl" value="3">
-              Daggerboard
-          </label>
-          <label>
-              <input type="radio" name="inputControl" value="4">
-              Vang
-          </label>
-          <label>
-              <input type="radio" name="inputControl" value="5">
-              Downhaul
-          </label>
-          <label>
-              <input type="radio" name="inputControl" value="6">
-              Outhaul
-          </label>
+        <!-- ======================================================== -->
+        <!--  CONTROL INTERFACE INTERCEPT PANES                       -->
+        <!-- ======================================================== -->
+        <div id="input-pane">
+          
+          <!-- SUB-GROUP: MAINSHEET & OUTHAUL -->
+          <div id="panel-sheet-outhaul" class="control-panel-group">
+            <div class="mb-3">
+              <label class="fw-bold text-dark mb-2">MainSheet (Boom Angle)</label>
+              <div class="d-flex flex-wrap gap-2">
+                <button class="btn btn-primary" onclick="updateBoomControl('0-8', this)">0° - 8°</button>
+                <button class="btn btn-outline-secondary" onclick="updateBoomControl('5-15', this)">5° - 15°</button>
+                <button class="btn btn-outline-secondary" onclick="updateBoomControl('35-65', this)">35° - 65°</button>
+                <button class="btn btn-outline-secondary" onclick="updateBoomControl('90', this)">90°</button>
+              </div>
+            </div>
+            <div>
+              <label class="fw-bold text-dark mb-2">Outhaul (Sail Fullness)</label>
+              <div class="d-flex gap-2">
+                <button class="btn btn-outline-secondary" onclick="updateOuthaulControl('Flat', this)">FLAT</button>
+                <button class="btn btn-primary" onclick="updateOuthaulControl('Base', this)">BASE</button>
+                <button class="btn btn-outline-secondary" onclick="updateOuthaulControl('Full', this)">FULL</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- SUB-GROUP: SAILOR POSITION -->
+          <div id="panel-sailor" class="control-panel-group d-none">
+            <div class="mb-3">
+              <label class="fw-bold text-dark mb-2">Weight Distribution & Hiking Status</label>
+              <div class="d-flex flex-wrap gap-2">
+                <button class="btn btn-outline-secondary" onclick="updateSailorPosition('Hike Hard', this)">Hike Hard</button>
+                <button class="btn btn-primary" onclick="updateSailorPosition('Mid Center', this)">Mid Center</button>
+                <button class="btn btn-outline-secondary" onclick="updateSailorPosition('Leeward', this)">Leeward</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- SUB-GROUP: VANG & DOWNHAUL -->
+          <div id="panel-vang-downhaul" class="control-panel-group d-none">
+            <div class="mb-3">
+              <label class="fw-bold text-dark mb-2">Vang (Leech Tension / Boom Downward Pull)</label>
+              <div class="d-flex gap-2">
+                <button class="btn btn-outline-secondary" onclick="updateVangControl('Ease', this)">EASE</button>
+                <button class="btn btn-primary" onclick="updateVangControl('Center', this)">CENTER</button>
+                <button class="btn btn-outline-secondary" onclick="updateVangControl('Max', this)">MAX</button>
+              </div>
+            </div>
+            <div>
+              <label class="fw-bold text-dark mb-2">Downhaul (Luff Tension / Bottom Mast Bend)</label>
+              <div class="d-flex gap-2">
+                <button class="btn btn-outline-secondary" onclick="updateDownhaulControl('Off', this)">OFF</button>
+                <button class="btn btn-primary" onclick="updateDownhaulControl('Base', this)">BASE</button>
+                <button class="btn btn-outline-secondary" onclick="updateDownhaulControl('Max Luff', this)">MAX LUFF</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+      
+      <div class="card-footer bg-white p-3 border-top-0 text-start">
+        <a href="learn.html" class="btn btn-outline-secondary">← Back to Learn Phase</a>
       </div>
     </div>
-    <div id="rudderControl"      style="flex: 1; display: flex; flex-direction: column;">
-      <div id="tackDiv" class="control-row" style="display: flex; flex: 1; align-items: stretch;">
-        <button class="control-button button-port" onclick="window.globalSimulationData.ILCA.maneuver = 'turn-port'" style="flex: 1; height: 100%;">TURN PORT</button>
-        <button class="control-button button-starboard" onclick="window.globalSimulationData.ILCA.maneuver = 'turn-starboard'" style="flex: 1; height: 100%;">TURN STARBOARD</button>
-      </div>
-    </div>
-    <div id="input-pane"         style="flex: 5;">
-      <div id="mainsheetControl" class="input-section active">
-        <h4>&nbsp;MainSheet</h4>
-        <div class="control-row">
-          <!-- Upwind Ranges -->
-          <button class="control-button" data-control="boom" data-value="0-8" onclick="updateBoomControl('0-8')">0° - 8°</button>
-          <button class="control-button" data-control="boom" data-value="5-15" onclick="updateBoomControl('5-15')">5° - 15°</button>
-        </div>
-        <div class="control-row">
-          <!-- Reaching Ranges -->
-          <button class="control-button" data-control="boom" data-value="35-65" onclick="updateBoomControl('35-65')">35° - 65°</button>
-          <button class="control-button" data-control="boom" data-value="40-70" onclick="updateBoomControl('40-70')">40° - 70°</button>
-      </div>
-          <div class="control-row">  
-          <!-- Downwind Ranges -->
-          <button class="control-button" data-control="boom" data-value="75-85" onclick="updateBoomControl('75-85')">75° - 85°</button>
-          <button class="control-button" data-control="boom" data-value="90" onclick="updateBoomControl('90')">90°</button>
-        </div>
-      </div>
+  </div>
 
-      <div id="daggerboardControl" class="input-section">
-        <div class="control-column">
-          <h4>&nbsp;Daggerboard Control</h4>
-          <button class="control-button" data-control="daggerboard" data-value="Up" onclick="updateDaggerboardControl('CENTERBOARD UP')">Up</button>
-          <button class="control-button" data-control="daggerboard" data-value="Center" onclick="updateDaggerboardControl('Center')">Center</button>
-          <button class="control-button" data-control="daggerboard" data-value="Down" onclick="updateDaggerboardControl('Down')">Down</button>
-        </div>
-      </div>
-
-      <div id="sailorPositionControl" class="input-section">
-        <h4>&nbsp;Sailor Position</h4>
-        <div class="control-row">
-          <button class="control-button" data-control="sailorPosition" data-value="Forward" onclick="updateSailorPosition('Forward')">Forward</button>
-        </div>
-        <div class="control-row">
-          <!-- STANDARDIZED: Set exclusively to Hike Hard -->
-          <button class="control-button" data-control="sailorPosition" data-value="Hike Hard" onclick="updateSailorPosition('Hike Hard')">Hike Hard</button>
-          <button class="control-button" data-control="sailorPosition" data-value="Mid Center" onclick="updateSailorPosition('Mid Center')">Mid Center</button>
-          <button class="control-button" data-control="sailorPosition" data-value="Leeward" onclick="updateSailorPosition('Leeward')">Leeward</button>
-        </div>
-        <div class="control-row">
-          <button class="control-button" data-control="sailorPosition" data-value="Aft" onclick="updateSailorPosition('Aft')">Aft</button>
-        </div>
-      </div>
-
-      <div id="vangControl" class="input-section">
-        <div class="control-column">
-          <h4>&nbsp;Vang</h4>
-          <button class="control-button" data-control="vang" data-value="Max" onclick="updateVangControl('Max')">MAX</button>
-          <button class="control-button" data-control="vang" data-value="Center" onclick="updateVangControl('Center')">CENTER</button>
-          <button class="control-button" data-control="vang" data-value="Ease" onclick="updateVangControl('Ease')">EASE</button>
-        </div>
-      </div>
-
-      <div id="downhaulControl" class="input-section">
-        <div class="control-column">
-          <h4>&nbsp;Downhaul</h4>
-          <!-- 🎯 FIXED FOR PERFECT CONSISTENCY WITH SCENARIO_TARGETS -->
-          <button class="control-button" data-control="downhaul" data-value="Max Luff" onclick="updateDownhaulControl('Max Luff')">MAX LUFF</button>
-          <button class="control-button" data-control="downhaul" data-value="Base" onclick="updateDownhaulControl('Base')">BASE</button>
-          <button class="control-button" data-control="downhaul" data-value="Off" onclick="updateDownhaulControl('Off')">OFF</button>
-        </div>
-      </div>
-
-      <div id="outhaulControl" class="input-section">
-        <div class="control-column">
-          <h4>&nbsp;Outhaul</h4>
-          <!-- 🎯 FIXED: Passed text strings to update functions and data-values -->
-          <button class="control-button" data-control="outhaul" data-value="Flat" onclick="updateOuthaulControl('Flat')">FLAT</button>
-          <button class="control-button" data-control="outhaul" data-value="Base" onclick="updateOuthaulControl('Base')">BASE</button>
-          <button class="control-button" data-control="outhaul" data-value="Full" onclick="updateOuthaulControl('Full')">FULL</button>
-        </div>
-      </div>
-    </div>
-    <div
-      id="divStart"
-      class="mt-3 d-flex flex-column align-items-center justify-content-start w-100">
-
-      <!-- Start Button -->
-      <button
-        id="startButton"
-        type="button"
-        class="btn btn-success btn-lg px-5 mb-3">
-        Start
-      </button>
-
-      <!-- Back Button -->
-      <a
-        href="index.html"
-        id="backButton"
-        class="btn btn-primary btn-lg px-5 mb-3 w-100 d-none">
-        Back to Main Menu
-      </a>
-
-    </div>
- 
-    <div style="
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%); /* Centered vertically and horizontally */
-        pointer-events: none;
-        font-family: system-ui, -apple-system, sans-serif;
-        min-width: 250px;
-        text-align: center; /* 🎯 FIX: Centers the text inside the 250px box */
-    ">
-        <h2 style="
-            margin: 0;
-            padding: 0;
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #198754;
-        ">Practice</h2>
-    </div>
-    <footer class="border-top mt-5 py-1">
-      <div class="container text-center">
-          <p class="mb-1">
-              <strong>Dinghy Sailing Tutorial</strong>
-          </p>
-          <small class="text-body-secondary">
-              Learn • Practice • Challenge
-          </small>
-      </div>
-    </footer>
-  </section>
-</body>
-
-  <script>
-    // Map start simulation button logic
-    const startButton = document.getElementById('startButton');
-      if (startButton) {
-        startButton.addEventListener('click', () => {
-          launchSimulation();
-          startButton.style.display = 'none';
-       });
-    }
-  </script>
-
-  <script>
-    const container = document.getElementById('controlSelector');
-
-    container.addEventListener('change', (event) => {
-        const selectedValue = event.target.value;
-        console.log(`clicked on value: ${selectedValue}`);
-
-        // 1. First, hide all control sections by removing the active class
-        const sections = document.querySelectorAll('.input-section');
-        sections.forEach(section => section.classList.remove('active'));
-
-        // 2. Show only the section that matches the checked radio button
-        // (Note: HTML values are numbers "1", "2", "3", etc.)
-        switch (selectedValue) {
-            case "1":
-                document.getElementById("mainsheetControl").classList.add("active");
-                break; // 💡 Added break to prevent falling through
-            case "2":
-                document.getElementById("sailorPositionControl").classList.add("active");
-                break;
-            case "3":
-                document.getElementById("daggerboardControl").classList.add("active");
-                break;
-            case "4":
-                document.getElementById("vangControl").classList.add("active");
-                break;
-            case "5":
-                document.getElementById("downhaulControl").classList.add("active");
-                break;
-            case "6":
-                document.getElementById("outhaulControl").classList.add("active");
-                break;
-        }
-    });
-
-  </script>
-
-
-  <script>
-    // Map start simulation button logic
-    const mapStartSimulationBtn = document.getElementById('mapStartSimulationBtn');
-    if (mapStartSimulationBtn) {
-        mapStartSimulationBtn.addEventListener('click', () => {
-          launchSimulation();
-          mapStartSimulationBtn.style.display = 'none';
-        });
-    }
-  </script>
-
-
-  <script>
-      // Watch for button clicks to update the highlights instantly
-      // This listens to any click inside the document
-      document.addEventListener("click", function(event) {
-          // Check if the clicked item is a control button
-          if (event.target.classList.contains("control-button")) {
-              
-              // Find the parent section (like #boomControl or #vangControl)
-              const parentSection = event.target.closest(".input-section");
-              
-              if (parentSection) {
-                  // Find any previously selected button in THIS section and clear it
-                  const previousActive = parentSection.querySelector(".control-button.selected");
-                  if (previousActive) {
-                      previousActive.classList.remove("selected");
-                  }
-                  
-                  // Add the highlight class to the newly clicked button
-                  event.target.classList.add("selected");
-              }
-          }
-      });
-
-  </script>
-
-
-  <script>
-      document.querySelectorAll('input[name="wind"]').forEach(radio => {
-          radio.addEventListener("change", () => {
-              const windSpeed = Number(radio.value);
-              window.globalSimulationData.windSpeed = windSpeed;
-              console.log("Wind changed to:", windSpeed, "knots");
-          });
-      });
-  </script>
-  <!-- 3. Dual UI/Vector Engine script configuration bindings -->
   <script src="js/practice-sail-trim.js"></script>
 </body>
 </html>
