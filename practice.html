@@ -61,53 +61,53 @@
             </div>
           </div>
 
-<!-- VIEW B: Sailor Position Dual Tracker (Back & Side View) -->
-<div id="viewSailor" class="sandbox-view">
-  <h6 class="text-secondary fw-bold mb-2">Sailor Position Layout (Transom & Bow Trim)</h6>
-  <div class="canvas-wrapper rounded border" style="height: 180px; background: white; padding: 10px;">
-    
-    <!-- Unified isolated container for standalone layout bounding -->
-    <div style="width: 100%; max-width: 320px; height: 100%; margin: 0 auto; position: relative;">
-      <svg viewBox="0 0 200 160" width="100%" height="100%">
-        
-        <!-- ======================================================== -->
-        <!--  STATIC GRAPHIC ITEMS (These will NEVER tilt or rotate) -->
-        <!-- ======================================================== -->
-        <!-- HEAVY GALE WEST WIND INDICATOR (Blowing left-to-right onto the Port beam) -->
-        <g id="sailorWindGroup">
-          <line x1="15" y1="25" x2="55" y2="25" stroke="#2b6cb0" stroke-width="5" stroke-linecap="round" />
-          <polygon points="47,17 59,25 47,33" fill="#2b6cb0" />
-          <text x="15" y="14" font-size="12" font-weight="bold" fill="#2b6cb0" style="user-select: none;">HEAVY WIND</text>
-        </g>
+          <!-- VIEW B: Sailor Position Dual Tracker (Back & Side View) -->
+          <div id="viewSailor" class="sandbox-view">
+            <h6 class="text-secondary fw-bold mb-2">Sailor Position Layout (Transom & Bow Trim)</h6>
+            <div class="canvas-wrapper rounded border" style="height: 180px; background: white; padding: 10px;">
+              
+              <!-- Unified isolated container for standalone layout bounding -->
+              <div style="width: 100%; max-width: 320px; height: 100%; margin: 0 auto; position: relative;">
+                <svg viewBox="0 0 200 160" width="100%" height="100%">
+                  
+                  <!-- ======================================================== -->
+                  <!--  STATIC GRAPHIC ITEMS (These will NEVER tilt or rotate) -->
+                  <!-- ======================================================== -->
+                  <!-- HEAVY GALE WEST WIND INDICATOR (Blowing left-to-right onto the Port beam) -->
+                  <g id="sailorWindGroup">
+                    <line x1="15" y1="25" x2="55" y2="25" stroke="#2b6cb0" stroke-width="5" stroke-linecap="round" />
+                    <polygon points="47,17 59,25 47,33" fill="#2b6cb0" />
+                    <text x="15" y="14" font-size="12" font-weight="bold" fill="#2b6cb0" style="user-select: none;">HEAVY WIND</text>
+                  </g>
 
-        <!-- STATIC CAPTIONS & INDICATORS -->
-        <text x="5" y="152" font-size="11" font-weight="bold" fill="#718096" style="user-select: none;">Port (Left)</text>
-        <text x="142" y="152" font-size="11" font-weight="bold" fill="#718096" style="user-select: none;">Starboard (Right)</text>
-        <text x="5" y="42" font-size="10" fill="#a0aec0" style="user-select: none;">Transom (Back View)</text>
+                  <!-- STATIC CAPTIONS & INDICATORS -->
+                  <text x="5" y="152" font-size="11" font-weight="bold" fill="#718096" style="user-select: none;">Port (Left)</text>
+                  <text x="142" y="152" font-size="11" font-weight="bold" fill="#718096" style="user-select: none;">Starboard (Right)</text>
+                  <text x="5" y="42" font-size="10" fill="#a0aec0" style="user-select: none;">Transom (Back View)</text>
 
-        <!-- ======================================================== -->
-        <!--  DYNAMIC TILTING SIMULATION GROUP (Targeted via ID)       -->
-        <!-- ======================================================== -->
-        <g id="tiltingRigGroup">
-          
-          <!-- ILCA Hull Profile (Transom View) -->
-          <polygon points="70,105 130,105 140,120 60,120" fill="#edf2f7" stroke="#4a5568" stroke-width="3" />
-          
-          <!-- Aluminum Rig Mast (Extends vertical from hull midpoint 100, 105) -->
-          <line x1="100" y1="105" x2="100" y2="30" stroke="#4a5568" stroke-width="4" stroke-linecap="round" />
-          
-          <!-- Stylized Sailor Stick Figure Crew Weight -->
-          <!-- Head -->
-          <circle id="crewHead" cx="100" cy="92" r="6" fill="#2d3748" />
-          <!-- Spine/Torso -->
-          <line id="crewBody" x1="100" y1="98" x2="100" y2="114" stroke="#2d3748" stroke-width="3" />
-        </g>
+                  <!-- ======================================================== -->
+                  <!--  DYNAMIC TILTING SIMULATION GROUP (Targeted via ID)       -->
+                  <!-- ======================================================== -->
+                  <g id="tiltingRigGroup">
+                    
+                    <!-- ILCA Hull Profile (Transom View) -->
+                    <polygon points="70,105 130,105 140,120 60,120" fill="#edf2f7" stroke="#4a5568" stroke-width="3" />
+                    
+                    <!-- Aluminum Rig Mast (Extends vertical from hull midpoint 100, 105) -->
+                    <line x1="100" y1="105" x2="100" y2="30" stroke="#4a5568" stroke-width="4" stroke-linecap="round" />
+                    
+                    <!-- Stylized Sailor Stick Figure Crew Weight -->
+                    <!-- Head -->
+                    <circle id="crewHead" cx="100" cy="92" r="6" fill="#2d3748" />
+                    <!-- Spine/Torso -->
+                    <line id="crewBody" x1="100" y1="98" x2="100" y2="114" stroke="#2d3748" stroke-width="3" />
+                  </g>
 
-      </svg>
-    </div>
+                </svg>
+              </div>
 
-  </div>
-</div>
+            </div>
+          </div>
 
 
           <!-- VIEW C: Rig Profile (Visible for Vang & Downhaul Mast Bending) -->

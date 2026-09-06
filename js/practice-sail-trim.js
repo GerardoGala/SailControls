@@ -1,5 +1,6 @@
 /**
  * sail-trim.js - Sandbox Controller & Dynamic Rig Bending Engine
+ * Fully Synchronized Matrix Layout Engine
  */
 
 // 1. Rig coordinate models for Vang and Downhaul combinations
@@ -74,7 +75,7 @@ function updateDownhaulControl(val, el) { highlightButtonRow(el); state.downhaul
  * Master Morph Execution Loop
  */
 function triggerSandboxRefresh() {
-  // 1. UPDATE CAMBER CANVAS (Top-Down View)
+  // 1. UPDATE CAMBER CANVAS (YOUR EXACT WORKING TOP-DOWN LOGIC PRESERVED)
   const boomTarget = CAMBER_VECTORS.mainsheet[state.mainsheet];
   const depth = CAMBER_VECTORS.outhaulBelly[state.outhaul];
   const midX = (50 + boomTarget.x2) / 2;
@@ -92,12 +93,38 @@ function triggerSandboxRefresh() {
   anime({ targets: '#mastProfilePath', d: [{ value: mastD }], easing: 'easeOutQuad', duration: 500 });
   anime({ targets: '#sailProfileCurvePath', d: [{ value: sailD }], easing: 'easeOutQuad', duration: 500 });
 
-  // 3. UPDATE SAILOR POSITION CANVAS (Heel/Transom Rolling)
-  let targetRoll = 0, headX = 80, bodyX2 = 80;
-  if (state.sailor === "Leeward") { targetRoll = 8; headX = 94; bodyX2 = 88; }
-  if (state.sailor === "Hike Hard") { targetRoll = -12; headX = 40; bodyX2 = 62; }
+  // ========================================================
+  // 3. REPAIRED SAILOR POSITION CALIBRATION (West Wind Setup)
+  // ========================================================
+  let targetRoll = 0;      
+  let headX = 100;    // Centered cleanly on the new 100px mast baseline mid-coordinate
+  let bodyX2 = 100;
 
-  anime({ targets: '#svgTransom', rotate: targetRoll, transformOrigin: '80px 120px', easing: 'easeOutQuad', duration: 400 });
+  if (state.sailor === "Hike Hard") {
+    targetRoll = 0;        // Balanced level upright (90 degrees / 0 degrees heel)
+    headX = 75;            // Crew figure leans far to the LEFT (Port) to balance heavy West breeze
+    bodyX2 = 85;
+  } 
+  else if (state.sailor === "Mid Center") {
+    targetRoll = 22;       // Heavy West wind forces boat to lean right to Starboard
+    headX = 100;           // Crew weight is neutral in center cockpit
+    bodyX2 = 100;
+  } 
+  else if (state.sailor === "Leeward") {
+    targetRoll = 78;       // Capsizes completely flat over to the RIGHT (Starboard side)
+    headX = 115;           // Crew falling over into leeward water space
+    bodyX2 = 110;
+  }
+
+  // Animate the rolling boat rig framework group using the correct 100px horizontal base pivot point
+  anime({ 
+    targets: '#tiltingRigGroup', 
+    rotate: targetRoll, 
+    transformOrigin: '100px 120px', 
+    easing: 'easeOutQuad', 
+    duration: 500 
+  });
+  
   anime({ targets: '#crewHead', cx: headX, easing: 'easeOutQuad', duration: 400 });
   anime({ targets: '#crewBody', x2: bodyX2, easing: 'easeOutQuad', duration: 400 });
 }
