@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Sail Controls | San Juan Academy</title>
+
+<meta name="description" content="Learn, practice, and master dinghy sail controls. Understand what each control does, how it changes the sail, and when to use it.">
+
+<!-- Bootstrap -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+  <style>
+    body { 
+      background-color: #f0f4f8; 
+    }
+    .tutorial-card { 
+      max-width: 1000px; 
+      margin: 5px auto; 
+    }
+    /* FIX: Force an absolute bounded graphic workspace zone to stop clipping */
+    .fixed-canvas-box { 
+      height: 240px; 
+      width: 100%;
+      background: white; 
+      border: 1px solid #dee2e6; 
+      border-radius: 6px; 
+      padding: 10px;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .step-dot { 
+      width: 12px; 
+      height: 12px; 
+      border-radius: 50%; 
+      background-color: #cbd5e0; 
+      display: inline-block; 
+      margin: 0 4px; 
+    }
+    .step-dot.active { 
+      background-color: #0d6efd; 
+    }
+  </style>
+     	<!-- 2. Your Personal Custom CSS Last (Overrides everything above safely) -->
+  	<link rel="stylesheet" href="css/style.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+    <link rel="manifest" href="favicon/site.webmanifest">
+
+</head>
+<body>
+  <div style="background-color: var(--nav-bg); color: var(--text-color); padding: 1rem;">
+    <h2>SJ Academy - Sail Controls</h2>
+  </div>		
+  <div class="container my-4" style="max-width: 1200px;">
+    <div class="card-body" style="padding-left: 6px; padding-right: 6px;">    
+        <!-- ======================================================== -->
+        <!--  VISUALIZATION ZONE (DYNAMIC CANVAS MUTATION TRACK)      -->
+        <!-- ======================================================== -->
+        <!-- VIEW A: Camber Cross-Section (Visible for Sheet & Outhaul) -->
+        <div id="viewCamber" class="sandbox-view active-view">
+
+        <h6 class="text-secondary fw-bold mb-1">
+            Camber Cross-Section
+        </h6>
+
+        <div class="canvas-wrapper rounded border"
+            style="height: 105px; overflow: hidden;">
+
+            <svg viewBox="0 0 200 160"
+                width="100%"
+                height="105"
+                preserveAspectRatio="xMidYMid meet">
+
+            <line x1="35" y1="80"
+                    x2="165" y2="80"
+                    stroke="#cbd5e0"
+                    stroke-width="2"
+                    stroke-dasharray="4,4" />
+
+            <!-- WIND -->
+            <g id="windArrowGroup">
+
+                <line x1="100" y1="5"
+                    x2="100" y2="25"
+                    stroke="#2b6cb0"
+                    stroke-width="5"
+                    stroke-linecap="round" />
+
+                <polygon points="94,17 100,28 106,17"
+                        fill="#2b6cb0" />
+
+                <text x="114" y="20"
+                    font-size="12"
+                    font-weight="bold"
+                    fill="#2b6cb0"
+                    style="user-select: none;">
+                WIND
+                </text>
+
+            </g>
+
+            <line id="topDownBoom"
+                    x1="50" y1="80"
+                    x2="148" y2="83"
+                    stroke="#4a5568"
+                    stroke-width="4"
+                    stroke-linecap="round" />
+
+            <path id="sailCamberPath"
+                    d="M 50,80 Q 95,98 148,83"
+                    fill="none"
+                    stroke="#e53e3e"
+                    stroke-width="4"
+                    stroke-linecap="round"/>
+
+            <circle cx="50"
+                    cy="80"
+                    r="5"
+                    fill="#4a5568" />
+
+            <text x="35"
+                    y="102"
+                    font-size="10"
+                    fill="#718096">
+                Mast
+            </text>
+
+            <text x="125"
+                    y="102"
+                    font-size="10"
+                    fill="#718096">
+                Clew
+            </text>
+
+            </svg>
+
+        </div>
+
+        </div>
+
+        <!-- VIEW B: Sailor Position Dual Tracker (Back & Side View) -->
+        <div id="viewSailor" class="sandbox-view">
+        <h6 class="text-secondary fw-bold mb-2">Sailor Position Layout (Transom & Bow Trim)</h6>
+        <div class="canvas-wrapper rounded border" style="height: 180px; background: white; padding: 10px;">
+            
+            <!-- Unified isolated container for standalone layout bounding -->
+            <div style="width: 100%; max-width: 320px; height: 100%; margin: 0 auto; position: relative;">
+            <svg viewBox="0 0 200 160" width="100%" height="100%">
+                
+                <!-- ======================================================== -->
+                <!--  STATIC GRAPHIC ITEMS (These will NEVER tilt or rotate) -->
+                <!-- ======================================================== -->
+                <!-- HEAVY GALE WEST WIND INDICATOR (Blowing left-to-right onto the Port beam) -->
+                <g id="sailorWindGroup">
+                <line x1="15" y1="25" x2="55" y2="25" stroke="#2b6cb0" stroke-width="5" stroke-linecap="round" />
+                <polygon points="47,17 59,25 47,33" fill="#2b6cb0" />
+                <text x="15" y="14" font-size="12" font-weight="bold" fill="#2b6cb0" style="user-select: none;">HEAVY WIND</text>
+                </g>
+
+                <!-- STATIC CAPTIONS & INDICATORS -->
+                <text x="5" y="152" font-size="11" font-weight="bold" fill="#718096" style="user-select: none;">Port (Left)</text>
+                <text x="142" y="152" font-size="11" font-weight="bold" fill="#718096" style="user-select: none;">Starboard (Right)</text>
+                <text x="5" y="42" font-size="10" fill="#a0aec0" style="user-select: none;">Transom (Back View)</text>
+
+                <!-- ======================================================== -->
+                <!--  DYNAMIC TILTING SIMULATION GROUP (Targeted via ID)       -->
+                <!-- ======================================================== -->
+                <g id="tiltingRigGroup">
+                
+                <!-- ILCA Hull Profile (Transom View) -->
+                <polygon points="70,105 130,105 140,120 60,120" fill="#edf2f7" stroke="#4a5568" stroke-width="3" />
+                
+                <!-- Aluminum Rig Mast (Extends vertical from hull midpoint 100, 105) -->
+                <line x1="100" y1="105" x2="100" y2="30" stroke="#4a5568" stroke-width="4" stroke-linecap="round" />
+                
+                <!-- Stylized Sailor Stick Figure Crew Weight -->
+                <!-- Head -->
+                <circle id="crewHead" cx="100" cy="92" r="6" fill="#2d3748" />
+                <!-- Spine/Torso -->
+                <line id="crewBody" x1="100" y1="98" x2="100" y2="114" stroke="#2d3748" stroke-width="3" />
+                </g>
+
+            </svg>
+            </div>
+
+        </div>
+        </div>
+    </div>
+  </div>
+
+    <!-- Control Selector -->
+    <div id="controlSelector" style="flex: 1;">
+    <h6>&nbsp;Control Selector</h6>
+
+    <div class="controlSelector"
+        style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+
+        <label>
+        <input type="radio" name="inputControl" value="1" checked>
+        Sheet
+        </label>
+
+        <label>
+        <input type="radio" name="inputControl" value="2">
+        Outhaul
+        </label>
+
+        <label>
+        <input type="radio" name="inputControl" value="3">
+        Sailor Position
+        </label>
+    </div>
+    </div>
+
+    <!-- Input Control -->
+    <div id="input-pane" style="flex: 3;">
+        <!-- MainSheet -->
+        <div id="mainsheetControl" class="input-section active">
+
+        <h6>&nbsp;MainSheet</h6>
+
+        <div class="control-row">
+            <button class="control-button"
+                    data-control="boom"
+                    data-value="0-8"
+                    onclick="updateBoomControl('0-8', this)">
+            0° - 8°
+            </button>
+
+            <button class="control-button"
+                    data-control="boom"
+                    data-value="5-15"
+                    onclick="updateBoomControl('5-15', this)">
+            5° - 15°
+            </button>
+        </div>
+
+        <div class="control-row">
+            <button class="control-button"
+                    data-control="boom"
+                    data-value="35-65"
+                    onclick="updateBoomControl('35-65', this)">
+            35° - 65°
+            </button>
+
+            <button class="control-button"
+                    data-control="boom"
+                    data-value="90"
+                    onclick="updateBoomControl('90', this)">
+            90°
+            </button>
+        </div>
+
+        </div>
+
+        <!-- Outhaul -->
+        <div id="outhaulControl" class="input-section">
+
+        <div class="control-column">
+
+            <h6>&nbsp;Outhaul</h6>
+
+            <button class="control-button"
+                    data-control="outhaul"
+                    data-value="Flat"
+                    onclick="updateOuthaulControl('Flat', this)">
+            FLAT
+            </button>
+
+            <button class="control-button"
+                    data-control="outhaul"
+                    data-value="Base"
+                    onclick="updateOuthaulControl('Base', this)">
+            BASE
+            </button>
+
+            <button class="control-button"
+                    data-control="outhaul"
+                    data-value="Full"
+                    onclick="updateOuthaulControl('Full', this)">
+            FULL
+            </button>
+
+        </div>
+
+        </div>
+
+        <!-- Sailor Position -->
+        <div id="sailorPositionControl" class="input-section">
+        <h6>&nbsp;Sailor Position</h6>
+        <div class="control-row">
+            <button class="control-button"
+                    data-control="sailorPosition"
+                    data-value="Hike Hard"
+                    onclick="updateSailorPosition('Hike Hard', this)">
+            Hike Hard
+            </button>
+            <button class="control-button"
+                    data-control="sailorPosition"
+                    data-value="Mid Center"
+                    onclick="updateSailorPosition('Mid Center', this)">
+            Mid Center
+            </button>
+            <button class="control-button"
+                    data-control="sailorPosition"
+                    data-value="Leeward"
+                    onclick="updateSailorPosition('Leeward', this)">
+            Leeward
+            </button>
+        </div>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center">
+    <a href="learn.html" class="btn btn-outline-secondary">
+        ← Back to Learn Phase
+    </a>
+
+    <a href="practice2.html" class="btn btn-primary">
+        Proceed to Practice 2 →
+    </a>
+    </div>
+
+    <!-- Footer -->
+    <footer class="border-top mt-5 py-1">
+    <div class="container text-center">
+    <p class="mb-1">
+        <strong>Dinghy Sailing Tutorial</strong>
+    </p>
+    <small class="text-body-secondary">
+        Learn • Practice • Challenge
+    </small>
+    </div>
+    </footer>
+
+<script>
+  // ---------------------------------------------------------
+  // CONTROL SELECTOR
+  // ---------------------------------------------------------
+
+  const controlSelector = document.getElementById("controlSelector");
+
+  if (controlSelector) {
+
+    controlSelector.addEventListener("change", function(event) {
+
+      const selectedValue = event.target.value;
+
+      // Hide all input sections
+      document.querySelectorAll(".input-section").forEach(section => {
+        section.classList.remove("active");
+      });
+
+      // Show the selected input section
+      switch (selectedValue) {
+
+        case "1":
+          document.getElementById("mainsheetControl").classList.add("active");
+          break;
+
+        case "2":
+          document.getElementById("outhaulControl").classList.add("active");
+          break;
+
+        case "3":
+          document.getElementById("sailorPositionControl").classList.add("active");
+          break;
+      }
+
+    });
+
+  }
+
+
+  // ---------------------------------------------------------
+  // CONTROL BUTTON HIGHLIGHTS
+  // ---------------------------------------------------------
+
+  document.addEventListener("click", function(event) {
+
+    if (event.target.classList.contains("control-button")) {
+
+      const parentSection =
+        event.target.closest(".input-section");
+
+      if (parentSection) {
+
+        const previousActive =
+          parentSection.querySelector(".control-button.selected");
+
+        if (previousActive) {
+          previousActive.classList.remove("selected");
+        }
+
+        event.target.classList.add("selected");
+      }
+    }
+
+  });
+
+
+  // ---------------------------------------------------------
+  // SAIL CONTROL FUNCTIONS
+  // ---------------------------------------------------------
+
+  function updateBoomControl(boomAngle) {
+
+    window.globalSimulationData.ILCA.boomAngle =
+      String(boomAngle);
+  }
+
+
+  function updateOuthaulControl(outhaul) {
+
+    window.globalSimulationData.ILCA.outhaul =
+      outhaul;
+  }
+
+
+  function updateSailorPosition(position) {
+
+    window.globalSimulationData.ILCA.sailorPosition =
+      position;
+  }
+
+</script>
+
+    <script src="js/practice-sail-trim.js"></script>
+    <script src="js/input.js"></script>
+</body>
+</html>
