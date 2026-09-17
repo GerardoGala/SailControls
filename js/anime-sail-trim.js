@@ -52,29 +52,29 @@ const sailState = {
 };
 
 // 6 Discrete API Interception Controllers
-function updateBoomControl(value) {
-  sailState.mainsheet = value; // e.g. '0-8', '90'
-  triggerInstantTrimAnimation();
+function updateBoomControl(boomAngle) {
+    window.globalSimulationData.ILCA.boomAngle = String(boomAngle);
+    triggerSandboxRefresh();
 }
 
-function updateSailorPosition(value) {
-  sailState.sailorPosition = value; // e.g. 'Hike Hard', 'Leeward'
-  triggerInstantTrimAnimation();
+function updateOuthaulControl(outhaul) {
+    window.globalSimulationData.ILCA.outhaul = outhaul;
+    triggerSandboxRefresh();
 }
 
-function updateDaggerboardControl(value) {
-  sailState.daggerboard = value; // e.g. 'Up', 'Center', 'Down'
-  triggerInstantTrimAnimation();
+function updateSailorPosition(position) {
+    window.globalSimulationData.ILCA.sailorPosition = position;
+    triggerSandboxRefresh();
 }
 
-function updateVangControl(value) {
-  sailState.vang = value.toUpperCase(); // Ensure matches "MAX", "CENTER", "EASE"
-  triggerInstantTrimAnimation();
+function updateVangControl(vang) {
+    window.globalSimulationData.ILCA.vang = vang;
+    triggerSandboxRefresh();
 }
 
-function updateDownhaulControl(value) {
-  sailState.downhaul = value.toUpperCase(); // Matches "MAX LUFF", "BASE", "OFF"
-  triggerInstantTrimAnimation();
+function updateDownhaulControl(downhaul) {
+    window.globalSimulationData.ILCA.downhaul = downhaul;
+    triggerSandboxRefresh();
 }
 
 function updateOuthaulControl(value) {

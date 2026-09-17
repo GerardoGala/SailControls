@@ -341,98 +341,99 @@
     </div>
     </footer>
 
-<script>
-  // ---------------------------------------------------------
-  // CONTROL SELECTOR
-  // ---------------------------------------------------------
+    <script>
+      // ---------------------------------------------------------
+      // CONTROL SELECTOR
+      // ---------------------------------------------------------
 
-  const controlSelector = document.getElementById("controlSelector");
+      const controlSelector = document.getElementById("controlSelector");
 
-  if (controlSelector) {
+      if (controlSelector) {
 
-    controlSelector.addEventListener("change", function(event) {
+        controlSelector.addEventListener("change", function(event) {
 
-      const selectedValue = event.target.value;
+          const selectedValue = event.target.value;
 
-      // Hide all input sections
-      document.querySelectorAll(".input-section").forEach(section => {
-        section.classList.remove("active");
-      });
+          // Hide all input sections
+          document.querySelectorAll(".input-section").forEach(section => {
+            section.classList.remove("active");
+          });
 
-      // Show the selected input section
-      switch (selectedValue) {
+          // Show the selected input section
+          switch (selectedValue) {
 
-        case "1":
-          document.getElementById("mainsheetControl").classList.add("active");
-          break;
+            case "1":
+              document.getElementById("mainsheetControl").classList.add("active");
+              break;
 
-        case "2":
-          document.getElementById("outhaulControl").classList.add("active");
-          break;
+            case "2":
+              document.getElementById("outhaulControl").classList.add("active");
+              break;
 
-        case "3":
-          document.getElementById("sailorPositionControl").classList.add("active");
-          break;
+            case "3":
+              document.getElementById("sailorPositionControl").classList.add("active");
+              break;
+          }
+
+        });
+
       }
 
-    });
 
-  }
+      // ---------------------------------------------------------
+      // CONTROL BUTTON HIGHLIGHTS
+      // ---------------------------------------------------------
 
+      document.addEventListener("click", function(event) {
 
-  // ---------------------------------------------------------
-  // CONTROL BUTTON HIGHLIGHTS
-  // ---------------------------------------------------------
+        if (event.target.classList.contains("control-button")) {
 
-  document.addEventListener("click", function(event) {
+          const parentSection =
+            event.target.closest(".input-section");
 
-    if (event.target.classList.contains("control-button")) {
+          if (parentSection) {
 
-      const parentSection =
-        event.target.closest(".input-section");
+            const previousActive =
+              parentSection.querySelector(".control-button.selected");
 
-      if (parentSection) {
+            if (previousActive) {
+              previousActive.classList.remove("selected");
+            }
 
-        const previousActive =
-          parentSection.querySelector(".control-button.selected");
-
-        if (previousActive) {
-          previousActive.classList.remove("selected");
+            event.target.classList.add("selected");
+          }
         }
 
-        event.target.classList.add("selected");
+      });
+
+
+      // ---------------------------------------------------------
+      // SAIL CONTROL FUNCTIONS
+      // ---------------------------------------------------------
+
+      function updateBoomControl(boomAngle) {
+
+        window.globalSimulationData.ILCA.boomAngle =
+          String(boomAngle);
       }
-    }
-
-  });
 
 
-  // ---------------------------------------------------------
-  // SAIL CONTROL FUNCTIONS
-  // ---------------------------------------------------------
+      function updateOuthaulControl(outhaul) {
 
-  function updateBoomControl(boomAngle) {
-
-    window.globalSimulationData.ILCA.boomAngle =
-      String(boomAngle);
-  }
+        window.globalSimulationData.ILCA.outhaul =
+          outhaul;
+      }
 
 
-  function updateOuthaulControl(outhaul) {
+      function updateSailorPosition(position) {
 
-    window.globalSimulationData.ILCA.outhaul =
-      outhaul;
-  }
+        window.globalSimulationData.ILCA.sailorPosition =
+          position;
+      }
 
+    </script>
 
-  function updateSailorPosition(position) {
-
-    window.globalSimulationData.ILCA.sailorPosition =
-      position;
-  }
-
-</script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script src="js/practice-sail-trim.js"></script>
     <script src="js/input.js"></script>
 </body>
