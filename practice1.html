@@ -223,43 +223,24 @@
     <!-- Input Control -->
     <div id="input-pane" style="flex: 3;">
         <!-- MainSheet -->
-        <div id="mainsheetControl" class="input-section active">
-
-        <h6>&nbsp;MainSheet</h6>
-
+      <div id="mainsheetControl" class="input-section active">
+        <h4>&nbsp;MainSheet</h4>
         <div class="control-row">
-            <button class="control-button"
-                    data-control="boom"
-                    data-value="0-8"
-                    onclick="updateBoomControl('0-8', this)">
-            0° - 8°
-            </button>
-
-            <button class="control-button"
-                    data-control="boom"
-                    data-value="5-15"
-                    onclick="updateBoomControl('5-15', this)">
-            5° - 15°
-            </button>
+          <!-- Upwind Ranges -->
+          <button class="control-button" data-control="boom" data-value="0-8" onclick="updateBoomControl('0-8')">0° - 8°</button>
+          <button class="control-button" data-control="boom" data-value="9-15" onclick="updateBoomControl('9-15')">9° - 15°</button>
         </div>
-
         <div class="control-row">
-            <button class="control-button"
-                    data-control="boom"
-                    data-value="35-65"
-                    onclick="updateBoomControl('35-65', this)">
-            35° - 65°
-            </button>
-
-            <button class="control-button"
-                    data-control="boom"
-                    data-value="90"
-                    onclick="updateBoomControl('90', this)">
-            90°
-            </button>
+          <!-- Reaching Ranges -->
+          <button class="control-button" data-control="boom" data-value="16-35" onclick="updateBoomControl('16-35')">16° - 35°</button>
+          <button class="control-button" data-control="boom" data-value="36-65" onclick="updateBoomControl('36-65')">36° - 65°</button>
+      </div>
+          <div class="control-row">  
+          <!-- Downwind Ranges -->
+          <button class="control-button" data-control="boom" data-value="66-85" onclick="updateBoomControl('66-85')">66° - 85°</button>
+          <button class="control-button" data-control="boom" data-value="86-90" onclick="updateBoomControl('86-90')">86° - 90°</button>
         </div>
-
-        </div>
+      </div>
 
         <!-- Outhaul -->
         <div id="outhaulControl" class="input-section">
