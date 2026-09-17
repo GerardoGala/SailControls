@@ -216,3 +216,11 @@ function cycleSandboxTab(directionOffset) {
 
   triggerSandboxRefresh();
 }
+
+// ---------------------------------------------------------
+// INITIAL SVG REFRESH
+// ---------------------------------------------------------
+
+document.addEventListener("DOMContentLoaded", function () {
+  triggerSandboxRefresh();
+});
