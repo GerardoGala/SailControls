@@ -176,7 +176,7 @@ const SLIDE_DATA = {
 
 function advanceStep() {
   currentStep++;
-  if (currentStep > 3) return;
+  if (currentStep > 3) { window.location.href = "index.html"; return; }
   
   const slide = SLIDE_DATA[currentStep];
   document.getElementById("slideTitle").innerHTML = slide.title;
