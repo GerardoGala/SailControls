@@ -59,30 +59,28 @@
     <div style="background-color: var(--nav-bg); color: var(--text-color); padding: 1rem;">
     <h2>SJ Academy - Sail Controls</h2>
     </div>		
-    <div class="container my-4" style="max-width: 1200px;">
-    <div class="card-body" style="padding-left: 6px; padding-right: 6px;">
-        
-        <!-- ======================================================== -->
-        <!--  VISUALIZATION ZONE (DYNAMIC CANVAS MUTATION TRACK)      -->
-        <!-- ======================================================== -->
+    <div class="container">
+        <div class="card-body" style="padding-left: 6px; padding-right: 6px;">
             
-            <!-- VIEW C: Rig Profile (Visible for Vang & Downhaul Mast Bending) -->
-            <div id="viewRig" class="sandbox-view">
-            <h6 class="text-secondary fw-bold mb-2">Rig Profile Tension (Side View Mast Bend)</h6>
-            <div class="canvas-wrapper rounded border">
-                <svg viewBox="0 0 200 160" width="50%" height="100%">
-                <line x1="30" y1="145" x2="180" y2="145" stroke="#cbd5e0" stroke-width="2" />
-                <!-- Mast Component (Targeted via Path for bending curves) -->
-                <path id="mastProfilePath" d="M 50,145 Q 50,75 50,15" fill="none" stroke="#4a5568" stroke-width="4" stroke-linecap="round"/>
-                <line id="profileBoomLine" x1="50" y1="125" x2="150" y2="125" stroke="#4a5568" stroke-width="3" />
-                <path id="sailProfileCurvePath" d="M 50,125 Q 75,70 50,20" fill="none" stroke="#3182ce" stroke-width="4" stroke-linecap="round" />
-                </svg>
+            <!-- ======================================================== -->
+            <!--  VISUALIZATION ZONE (DYNAMIC CANVAS MUTATION TRACK)      -->
+            <!-- ======================================================== -->
+                
+                <!-- VIEW C: Rig Profile (Visible for Vang & Downhaul Mast Bending) -->
+                <div id="viewRig" class="sandbox-view">
+                <h6 class="text-secondary fw-bold mb-2">Rig Profile Tension (Side View Mast Bend)</h6>
+                <div class="canvas-wrapper rounded border">
+                    <svg viewBox="0 0 200 160" width="50%" height="100%">
+                    <line x1="30" y1="145" x2="180" y2="145" stroke="#cbd5e0" stroke-width="2" />
+                    <!-- Mast Component (Targeted via Path for bending curves) -->
+                    <path id="mastProfilePath" d="M 50,145 Q 50,75 50,15" fill="none" stroke="#4a5568" stroke-width="4" stroke-linecap="round"/>
+                    <line id="profileBoomLine" x1="50" y1="125" x2="150" y2="125" stroke="#4a5568" stroke-width="3" />
+                    <path id="sailProfileCurvePath" d="M 50,125 Q 75,70 50,20" fill="none" stroke="#3182ce" stroke-width="4" stroke-linecap="round" />
+                    </svg>
+                </div>
             </div>
         </div>
-    </div>
-    </div>
-
-    <!-- Control Selector -->
+            <!-- Control Selector -->
     <div id="controlSelector" style="flex: 1;">
         <h6>&nbsp;Control Selector</h6>
 
@@ -167,15 +165,18 @@
         </div>
     </div>
 
-    <div class="d-flex justify-content-between align-items-center">
-    <a href="practice1.html" class="btn btn-outline-secondary">
-        ← Back to Practice 1
-    </a>
+        <div class="d-flex justify-content-between align-items-center">
+        <a href="practice1.html" class="btn btn-outline-secondary">
+            ← Back to Practice 1
+        </a>
 
-    <a href="challenge.html" class="btn btn-primary">
-        Proceed to Challenge →
-    </a>
+        <a href="challenge.html" class="btn btn-primary">
+            Proceed to Challenge →
+        </a>
+        </div>
     </div>
+
+
 
     <!-- Footer -->
     <footer class="border-top mt-5 py-1">
